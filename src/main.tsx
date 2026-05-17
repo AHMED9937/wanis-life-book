@@ -1,27 +1,23 @@
 import { ClerkProvider } from "@clerk/clerk-react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { WanisLogo } from "./components/WanisLogo";
-import { APP_AUTH_PATH } from "./routes/authPaths";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {clerkPubKey ? (
-      <BrowserRouter>
-        <ClerkProvider
-          publishableKey={clerkPubKey}
-          afterSignOutUrl="/"
-          signInFallbackRedirectUrl={APP_AUTH_PATH}
-          signUpFallbackRedirectUrl={APP_AUTH_PATH}
-        >
-          <App />
-        </ClerkProvider>
-      </BrowserRouter>
+      <ClerkProvider
+        publishableKey={clerkPubKey}
+        afterSignOutUrl="/"
+        signInFallbackRedirectUrl="/"
+        signUpFallbackRedirectUrl="/"
+      >
+        <App />
+      </ClerkProvider>
     ) : (
       <div className="wood-desk min-h-screen flex items-center justify-center p-6">
         <div className="bg-[#f4ecd8] rounded-xl p-6 shadow-2xl border-2 border-[#c9a84c] max-w-lg w-full">

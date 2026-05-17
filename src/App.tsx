@@ -1,18 +1,17 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { APP_AUTH_PATH } from './routes/authPaths';
-import { AppRoute } from './routes/AppRoute';
-import { HomeRoute } from './routes/HomeRoute';
+import { useAuth } from '@clerk/clerk-react';
+import { AuthenticatedApp } from './AuthenticatedApp';
+import { LandingPage } from './components/LandingPage';
 
 /**
- * `/` = public landing (guests & while Clerk loads)
- * `/app` = signed-in library & life books
+ * Not signed in (or Clerk still loading) → full marketing landing page.
+ * Signed in → library & life books. No separate login gate screen.
  */
 export default function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<HomeRoute />} />
-      <Route path={APP_AUTH_PATH} element={<AppRoute />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  );
+  const { isLoaded, isSignedIn } = useAuth();
+
+  if (!isLoaded || !isSignedIn) {
+    return <LandingPage />;
+  }
+
+  return <AuthenticatedApp />;
 }

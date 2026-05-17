@@ -20,7 +20,6 @@ import {
   Users,
 } from 'lucide-react';
 import { WanisLogo, WanisLogoMark } from './WanisLogo';
-import { APP_AUTH_PATH } from '../routes/authPaths';
 
 const TEAM_CREATORS = [
   'صفيه محمد',
@@ -94,7 +93,7 @@ function AuthButtons({ size = 'md' }: { size?: 'md' | 'lg' }) {
   const pad = size === 'lg' ? 'px-8 py-3.5 text-base' : 'px-5 py-2.5 text-sm';
   return (
     <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-      <SignUpButton mode="modal" forceRedirectUrl={APP_AUTH_PATH}>
+      <SignUpButton mode="modal" forceRedirectUrl="/">
         <button
           type="button"
           className={`${pad} w-full sm:w-auto rounded-full bg-gradient-to-r from-[#c9a84c] to-[#a08131] hover:from-[#e3c778] hover:to-[#c9a84c] text-[#1c120a] font-bold shadow-lg shadow-[#c9a84c]/25 cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.98] font-cairo`}
@@ -102,7 +101,7 @@ function AuthButtons({ size = 'md' }: { size?: 'md' | 'lg' }) {
           ابدأ مجاناً  إنشاء حساب
         </button>
       </SignUpButton>
-      <SignInButton mode="modal" forceRedirectUrl={APP_AUTH_PATH}>
+      <SignInButton mode="modal" forceRedirectUrl="/">
         <button
           type="button"
           className={`${pad} w-full sm:w-auto rounded-full bg-[#3a2010]/80 hover:bg-[#4d2a15] text-[#f4ecd8] font-semibold border border-[#c9a84c]/40 cursor-pointer transition-all font-cairo backdrop-blur-sm`}
@@ -183,12 +182,12 @@ export function LandingPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <SignInButton mode="modal" forceRedirectUrl={APP_AUTH_PATH}>
+            <SignInButton mode="modal" forceRedirectUrl="/">
               <button type="button" className="text-sm px-3 py-1.5 rounded-lg text-[#f4ecd8] hover:bg-white/5 font-cairo cursor-pointer">
                 دخول
               </button>
             </SignInButton>
-            <SignUpButton mode="modal" forceRedirectUrl={APP_AUTH_PATH}>
+            <SignUpButton mode="modal" forceRedirectUrl="/">
               <button
                 type="button"
                 className="text-sm px-4 py-1.5 rounded-lg bg-[#c9a84c] text-[#1c120a] font-bold font-cairo hover:bg-[#e3c778] cursor-pointer"
