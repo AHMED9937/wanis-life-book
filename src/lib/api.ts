@@ -3,11 +3,13 @@ import {
   ApiClientError,
   ApiErrorPayload,
   ApiResponse,
+  CareHomeUpdateDto,
   CreateResidentRequest,
   CreateStoryRequest,
   DbCoverStyle,
   DbResidentDto,
   DbStoryDto,
+  MeProfileDto,
 } from '../types/api';
 
 const BASE_URL = '/api';
@@ -128,6 +130,26 @@ export const resolveApiErrorMessage = (error: unknown, fallbackMessage: string):
 };
 
 // --- API Client Functions ---
+
+export const fetchMeProfile = async (token: string): Promise<MeProfileDto> => {
+  return requestJson<MeProfileDto>(`${BASE_URL}/me`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+export const updateCareHome = async (
+  token: string,
+  payload: { name: string; contactNumber?: string; address?: string },
+): Promise<CareHomeUpdateDto> => {
+  return requestJson<CareHomeUpdateDto>(`${BASE_URL}/me/care-home`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+};
 
 export const fetchResidents = async (token: string, query?: string): Promise<Resident[]> => {
   const params = new URLSearchParams();

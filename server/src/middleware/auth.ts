@@ -63,6 +63,7 @@ const clerkId = auth.userId;
           name: careHomeName,
           contactNumber: "—",
           address: "—",
+          setupCompleted: false,
         },
       });
 

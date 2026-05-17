@@ -56,12 +56,13 @@ enum ShareLinkType {
 // -----------------------------
 
 model CareHome {
-  id            String     @id @default(uuid()) @db.Uuid
-  name          String
-  contactNumber String     @map("contact_number")
-  address       String     @db.Text
-  createdAt     DateTime   @default(now()) @map("created_at")
-  updatedAt     DateTime   @updatedAt @map("updated_at")
+  id              String     @id @default(uuid()) @db.Uuid
+  name            String
+  contactNumber   String     @map("contact_number")
+  address         String     @db.Text
+  setupCompleted  Boolean    @default(false) @map("setup_completed")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
 
   users         User[]
   residents     Resident[]
@@ -80,8 +81,9 @@ model User {
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime  @updatedAt @map("updated_at")
 
-  careHome   CareHome  @relation(fields: [careHomeId], references: [id], onDelete: Cascade)
-  stories    Story[]   @relation("StoriesRecordedBy")
+  careHome          CareHome   @relation(fields: [careHomeId], references: [id], onDelete: Cascade)
+  stories           Story[]    @relation("StoriesRecordedBy")
+  residentsCreated  Resident[] @relation("ResidentsCreatedBy")
 
   @@index([careHomeId])
   @@map("users")
@@ -89,7 +91,8 @@ model User {
 
 model Resident {
   id              String    @id @default(uuid()) @db.Uuid
-  careHomeId       String    @db.Uuid @map("care_home_id")
+  careHomeId      String    @db.Uuid @map("care_home_id")
+  createdById     String?   @db.Uuid @map("created_by_id")
   firstName       String    @map("first_name")
   lastName        String    @map("last_name")
   nickname        String?   @map("nickname")
@@ -101,9 +104,11 @@ model Resident {
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
   careHome         CareHome  @relation(fields: [careHomeId], references: [id], onDelete: Cascade)
+  createdBy        User?     @relation("ResidentsCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   lifeBook         LifeBook?
 
   @@index([careHomeId])
+  @@index([createdById])
   @@map("residents")
 }
 

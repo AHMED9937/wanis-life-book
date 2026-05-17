@@ -9,7 +9,15 @@ import { StoryDetailView } from './components/StoryDetailView';
 import { ContiguousPrintView } from './components/ContiguousPrintView';
 import { CreateResidentModal } from './components/CreateResidentModal';
 import { Resident, Story } from './types';
-import { createResident, createStory, fetchResidents, resolveApiErrorMessage } from './lib/api';
+import { CareHomeSetupModal } from './components/CareHomeSetupModal';
+import {
+  createResident,
+  createStory,
+  fetchMeProfile,
+  fetchResidents,
+  resolveApiErrorMessage,
+  updateCareHome,
+} from './lib/api';
 
 export default function App() {
   const { getToken, isSignedIn } = useAuth();
@@ -27,6 +35,9 @@ export default function App() {
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [hasLoadedResidents, setHasLoadedResidents] = useState(false);
   const [residentsError, setResidentsError] = useState<string | null>(null);
+  const [careHomeName, setCareHomeName] = useState<string | null>(null);
+  const [needsCareHomeSetup, setNeedsCareHomeSetup] = useState(false);
+  const [isProfileLoading, setIsProfileLoading] = useState(true);
 
   // Display helpful confirmation toast messages
   const showToast = (msg: string) => {
@@ -90,10 +101,41 @@ export default function App() {
     void loadResidents(query, { isSearch: true });
   }, [loadResidents]);
 
-  // Initialize residents data from API
+  const loadProfile = useCallback(async () => {
+    if (!isSignedIn) {
+      setCareHomeName(null);
+      setNeedsCareHomeSetup(false);
+      setIsProfileLoading(false);
+      return;
+    }
+    setIsProfileLoading(true);
+    try {
+      const token = await getToken();
+      if (!token) return;
+      const profile = await fetchMeProfile(token);
+      setCareHomeName(profile.careHome.name);
+      setNeedsCareHomeSetup(!profile.careHome.setupCompleted);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsProfileLoading(false);
+    }
+  }, [getToken, isSignedIn]);
+
+  const handleCareHomeSetupComplete = async (name: string) => {
+    const token = await getToken();
+    if (!token) return;
+    const updated = await updateCareHome(token, { name });
+    setCareHomeName(updated.name);
+    setNeedsCareHomeSetup(false);
+    showToast('✅ تم إعداد دارك بنجاح — بياناتك خاصة بحسابك فقط');
+    await loadResidents('');
+  };
+
   useEffect(() => {
+    void loadProfile();
     void loadResidents('');
-  }, [loadResidents]);
+  }, [loadProfile, loadResidents]);
 
   // Find currently selected resident object
   const currentResident = residents.find(r => r.id === selectedResidentId) || null;
@@ -251,9 +293,17 @@ export default function App() {
           {/* Caregiver Authorization Header */}
           <CaregiverHeader
             currentView={view}
+            careHomeName={careHomeName}
             onGoToLibrary={handleGoToLibrary}
             onCreateNewResident={() => setIsCreateModalOpen(true)}
           />
+
+          {needsCareHomeSetup && careHomeName && !isProfileLoading && (
+            <CareHomeSetupModal
+              defaultName={careHomeName}
+              onComplete={handleCareHomeSetupComplete}
+            />
+          )}
 
           {/* Floating Notification Toast */}
           {toastMessage && (

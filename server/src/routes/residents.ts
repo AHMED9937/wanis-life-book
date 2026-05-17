@@ -94,6 +94,7 @@ residentsRouter.post("/", async (req, res, next) => {
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
         roomNumber,
         careHomeId: req.user!.careHomeId,
+        createdById: req.user!.id,
         lifeBook: {
           create: {
             bookTitle: `كتاب حياة ${firstName}`,

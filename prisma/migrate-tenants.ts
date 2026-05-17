@@ -2,11 +2,21 @@
  * One-time fix: split users who share the same care home into private homes.
  * Reassign residents to the care home of whoever first recorded a story for them.
  *
- * Run: npx tsx prisma/migrate-tenants.ts
+ * Run: npm run migrate:tenants
  */
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import pg from "pg";
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  console.error("DATABASE_URL is required in .env");
+  process.exit(1);
+}
+
+const pool = new pg.Pool({ connectionString });
+const prisma = new PrismaClient({ adapter: new PrismaPg(pool) });
 
 const SHARED_HOME_NAMES = ["Unassigned", "Wanis Demo"];
 
@@ -111,6 +121,23 @@ async function main() {
     console.log(`  ↳ Resident ${resident.firstName} → Wanis Demo (sample/orphan)`);
   }
 
+  console.log("\nLinking createdById on residents...");
+  const allResidents = await prisma.resident.findMany({
+    include: {
+      lifeBook: { include: { stories: { orderBy: { createdAt: "asc" }, take: 1 } } },
+    },
+  });
+  for (const resident of allResidents) {
+    if (resident.createdById) continue;
+    const recorderId = resident.lifeBook?.stories[0]?.recordedById;
+    if (recorderId) {
+      await prisma.resident.update({
+        where: { id: resident.id },
+        data: { createdById: recorderId },
+      });
+    }
+  }
+
   const oldUnassigned = sharedHomes.find((h) => h.name === "Unassigned");
   if (oldUnassigned) {
     const remaining = await prisma.user.count({
@@ -133,4 +160,7 @@ main()
     console.error(e);
     process.exit(1);
   })
-  .finally(() => prisma.$disconnect());
+  .finally(async () => {
+    await prisma.$disconnect();
+    await pool.end();
+  });

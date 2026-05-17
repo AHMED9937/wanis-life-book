@@ -121,6 +121,7 @@ async function main() {
         name: 'Wanis Demo',
         contactNumber: '00000000',
         address: 'Sample data for demo admin only',
+        setupCompleted: true,
       }
     });
     console.log('✅ Created demo care home (Wanis Demo)');

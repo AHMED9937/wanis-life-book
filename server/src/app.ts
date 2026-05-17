@@ -5,6 +5,7 @@ import { clerkAuth, protectRoute, resolveTenant } from "./middleware/auth.js";
 import { residentsRouter } from "./routes/residents.js";
 import { storiesRouter } from "./routes/stories.js";
 import { ttsRouter } from "./routes/tts.js";
+import { meRouter } from "./routes/me.js";
 
 export const app = express();
 
@@ -37,6 +38,7 @@ app.use(protectRoute);
 app.use(resolveTenant);
 
 // Mount API routers
+app.use("/api/me", meRouter);
 app.use("/api/residents", residentsRouter);
 app.use("/api/stories", storiesRouter);
 app.use("/api/tts", ttsRouter);

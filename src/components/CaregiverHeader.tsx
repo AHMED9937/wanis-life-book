@@ -4,12 +4,14 @@ import { Library, UserCheck, PlusCircle } from 'lucide-react';
 
 interface CaregiverHeaderProps {
   currentView: string;
+  careHomeName?: string | null;
   onGoToLibrary: () => void;
   onCreateNewResident: () => void;
 }
 
 export const CaregiverHeader: React.FC<CaregiverHeaderProps> = ({
   currentView,
+  careHomeName,
   onGoToLibrary,
   onCreateNewResident
 }) => {
@@ -33,7 +35,13 @@ export const CaregiverHeader: React.FC<CaregiverHeaderProps> = ({
               مصادقة موثوقة عبر Clerk
             </div>
             <h1 className="text-sm font-cairo text-gray-300">
-              الأخصائي الاجتماعي: <span className="text-white font-semibold">{caregiverName}</span>
+              الأخصائي: <span className="text-white font-semibold">{caregiverName}</span>
+              {careHomeName && (
+                <>
+                  <span className="text-gray-500 mx-1">|</span>
+                  <span className="text-[#e3c778] font-semibold">{careHomeName}</span>
+                </>
+              )}
             </h1>
           </div>
         </div>

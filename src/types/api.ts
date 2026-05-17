@@ -74,6 +74,26 @@ export interface CreateResidentRequest {
   roomNumber?: string;
 }
 
+export interface MeProfileDto {
+  user: {
+    id: string;
+    fullName: string;
+    email: string;
+    role: string;
+  };
+  careHome: {
+    id: string;
+    name: string;
+    setupCompleted: boolean;
+  };
+}
+
+export interface CareHomeUpdateDto {
+  id: string;
+  name: string;
+  setupCompleted: boolean;
+}
+
 export interface CreateStoryRequest {
   lifeBookId: string;
   title: string;

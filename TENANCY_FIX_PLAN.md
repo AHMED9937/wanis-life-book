@@ -46,7 +46,7 @@ Each Clerk account → one `User` row → **one private `CareHome`** → residen
 
 ## Fix plan (phases)
 
-### Phase 1 — Stop the bleeding (required) ✅ implementing
+### Phase 1 — Stop the bleeding (required) ✅ Done
 
 | Task | File | Action |
 |------|------|--------|
@@ -54,7 +54,7 @@ Each Clerk account → one `User` row → **one private `CareHome`** → residen
 | 1.2 | `seed.ts` | Put demo residents in **`Wanis Demo`** care home, link only to seed admin user |
 | 1.3 | — | New signups get **empty library** (their own home) |
 
-### Phase 2 — Repair existing production data (run once)
+### Phase 2 — Repair existing production data (run once) ✅ Script: `npm run migrate:tenants`
 
 | Task | Action |
 |------|--------|
@@ -62,14 +62,15 @@ Each Clerk account → one `User` row → **one private `CareHome`** → residen
 | 2.2 | Reassign residents | Move each resident to the care home of the user who **first recorded a story** for that resident |
 | 2.3 | Demo data | Keep sample residents on **Wanis Demo**; only `admin@wanis.app` (or no real users) stays attached to demo |
 
-### Phase 3 — Hardening (recommended)
+### Phase 3 — Hardening (recommended) ✅ Partial
 
-| Task | Action |
-|------|--------|
-| 3.1 | `Resident.createdById` | Optional column: who created the resident (clear ownership) |
-| 3.2 | Onboarding UI | First login: “اسم دار الرعاية” → set care home name |
-| 3.3 | Invite model (later) | Multiple caregivers **join same** care home via invite code (real multi-user org) |
-| 3.4 | Audit tests | Two Clerk test users → User A cannot see User B residents |
+| Task | Action | Status |
+|------|--------|--------|
+| 3.1 | `Resident.createdById` | Who created the resident | ✅ Done |
+| 3.2 | Onboarding UI | First login: “اسم دار الرعاية” modal | ✅ Done |
+| 3.3 | `GET/PATCH /api/me` | Profile + care home setup | ✅ Done |
+| 3.4 | Invite model (later) | Staff join same home via invite code | Not started |
+| 3.5 | Audit tests | Two Clerk users isolation test | Not started |
 
 ### Phase 4 — Clerk / orgs (optional, later)
 
@@ -102,7 +103,7 @@ Use Clerk Organizations so one care facility = one org, many staff accounts shar
 
 | Phase | Status |
 |-------|--------|
-| 1 | In progress |
-| 2 | Script provided |
-| 3 | Not started |
+| 1 | Done |
+| 2 | Run `npm run migrate:tenants` once per environment |
+| 3 | Done (invite codes later) |
 | 4 | Not started |
