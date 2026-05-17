@@ -20,7 +20,7 @@ gh repo create YOUR-REPO-NAME --public --source=. --remote=origin --push
 1. Go to [vercel.com/new](https://vercel.com/new)
 2. **Import** your GitHub repository
 3. Framework: **Other** (settings come from `vercel.json`)
-4. Add **Environment Variables** (Production + Preview):
+4. Add **Environment Variables** (check **Production**, **Preview**, and **Development**):
 
 | Name | Value |
 |------|--------|
@@ -30,9 +30,16 @@ gh repo create YOUR-REPO-NAME --public --source=. --remote=origin --push
 | `VITE_CLERK_PUBLISHABLE_KEY` | Same as publishable key (needed at build time) |
 | `NODE_ENV` | `production` |
 
-5. Click **Deploy**
+5. **Run migrations once** from your PC (before or after first deploy):
 
-Build runs: `prisma generate` → `prisma migrate deploy` → `vite build`.
+```bash
+# Use the same DATABASE_URL as in Vercel
+npx prisma migrate deploy
+```
+
+6. Click **Deploy** (or **Redeploy**)
+
+Build runs: `prisma generate` → `vite build` (migrations are **not** run on Vercel to avoid missing `DATABASE_URL` at build time).
 
 ## 3. Clerk production URLs
 
@@ -67,7 +74,8 @@ npm run dev            # terminal 2 — port 5173
 
 | Issue | Fix |
 |-------|-----|
-| Build fails on Prisma | Set `DATABASE_URL` in Vercel **before** first deploy |
+| Build fails on Prisma / `datasource.url` | Add `DATABASE_URL` in Vercel → Settings → Environment Variables (all environments). Redeploy. |
+| `migrate deploy` error on Vercel | Fixed: migrations run locally, not on Vercel build. Run `npx prisma migrate deploy` on your PC. |
 | 401 on API | Check `CLERK_SECRET_KEY` on Vercel |
 | Blank app / Clerk error | Set `VITE_CLERK_PUBLISHABLE_KEY` and redeploy |
 | API 500 | Vercel → Project → Logs → Functions |
