@@ -50,31 +50,30 @@ const clerkId = auth.userId;
       const fullName = `${clerkUser.firstName ?? ""} ${clerkUser.lastName ?? ""}`.trim();
       const avatarUrl = clerkUser.imageUrl;
 
-      // Handle the CareHome requirement
-      // We will create/find a default "Unassigned" CareHome for new users
-      let defaultCareHome = await prisma.careHome.findFirst({
-        where: { name: "Unassigned" },
+      // Each account gets its own care home — never share "Unassigned" across users
+      const careHomeName =
+        fullName && fullName !== "Unknown User"
+          ? `دار ${fullName}`
+          : email
+            ? `دار ${email.split("@")[0]}`
+            : "دار الرعاية";
+
+      const personalCareHome = await prisma.careHome.create({
+        data: {
+          name: careHomeName,
+          contactNumber: "—",
+          address: "—",
+        },
       });
 
-      if (!defaultCareHome) {
-        defaultCareHome = await prisma.careHome.create({
-          data: {
-            name: "Unassigned",
-            contactNumber: "0000000000",
-            address: "System Default",
-          },
-        });
-      }
-
-      // Create the user in our database
       user = await prisma.user.create({
         data: {
           clerkId,
           email,
           fullName: fullName || "Unknown User",
           avatarUrl,
-          role: "caregiver", // Default role
-          careHomeId: defaultCareHome.id,
+          role: "caregiver",
+          careHomeId: personalCareHome.id,
         },
       });
     }

@@ -113,17 +113,17 @@ const parseArabicDuration = (dur: string): number => {
 async function main() {
   console.log('🌱 Starting database seed...');
 
-  // 1. Bootstrap Core Tenants
-  let careHome = await prisma.careHome.findFirst({ where: { name: 'Unassigned' } });
+  // 1. Demo care home only (not shared with real signups — see auth.ts)
+  let careHome = await prisma.careHome.findFirst({ where: { name: 'Wanis Demo' } });
   if (!careHome) {
     careHome = await prisma.careHome.create({
       data: {
-        name: 'Unassigned',
+        name: 'Wanis Demo',
         contactNumber: '00000000',
-        address: 'Default Care Home',
+        address: 'Sample data for demo admin only',
       }
     });
-    console.log('✅ Created Default Care Home - Unassigned');
+    console.log('✅ Created demo care home (Wanis Demo)');
   }
 
   let adminUser = await prisma.user.findFirst({ where: { email: 'admin@wanis.app' } });
