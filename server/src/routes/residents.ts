@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { prisma } from "../lib/prisma.js";
+import { seedDemoLibraryForCareHome } from "../lib/demoResidents.js";
 import { residentMatchesQuery } from "../lib/search.js";
 
 export const residentsRouter = Router();
@@ -9,8 +10,12 @@ export const residentsRouter = Router();
 residentsRouter.get("/", async (req, res, next) => {
   try {
     const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
+    const careHomeId = req.user!.careHomeId;
 
-    const baseWhere = { careHomeId: req.user!.careHomeId };
+    // Backfill starter library for accounts created before demo-per-user (empty home only)
+    await seedDemoLibraryForCareHome(prisma, careHomeId, req.user!.id);
+
+    const baseWhere = { careHomeId };
 
   const include = {
     lifeBook: {

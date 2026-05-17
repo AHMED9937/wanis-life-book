@@ -1,6 +1,7 @@
 import { UserButton, useUser } from '@clerk/clerk-react';
 import React from 'react';
 import { Library, UserCheck, PlusCircle } from 'lucide-react';
+import { WanisLogo } from './WanisLogo';
 
 interface CaregiverHeaderProps {
   currentView: string;
@@ -26,9 +27,12 @@ export const CaregiverHeader: React.FC<CaregiverHeaderProps> = ({
         
         {/* App Title & Current Caregiver Status */}
         <div className="flex items-center gap-3">
-          <div className="bg-gradient-to-br from-[#c9a84c] to-[#a08131] text-[#1c120a] p-2 rounded-lg font-bold text-xl font-amiri shadow-md">
-            ونيس
-          </div>
+          <WanisLogo
+            size={44}
+            variant="full"
+            tagline="كتاب الحياة"
+            onClick={onGoToLibrary}
+          />
           <div>
             <div className="flex items-center gap-2 text-xs text-[#c9a84c] font-bold">
               <UserCheck size={14} className="text-[#e3c778]" />

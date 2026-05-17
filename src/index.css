@@ -28,6 +28,47 @@
   font-family: 'Cairo', sans-serif;
 }
 
+/* Landing page animations */
+@keyframes landing-float {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-14px) rotate(1.5deg); }
+}
+
+@keyframes landing-pulse-glow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.08); }
+}
+
+@keyframes landing-shimmer {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-20%); }
+}
+
+.landing-float {
+  animation: landing-float 5.5s ease-in-out infinite;
+}
+
+.landing-float-delay {
+  animation-delay: -2.75s;
+}
+
+.landing-float-slow {
+  animation: landing-float 7s ease-in-out infinite;
+  animation-delay: -1s;
+}
+
+.landing-pulse {
+  animation: landing-pulse-glow 8s ease-in-out infinite;
+}
+
+.landing-pulse-delay {
+  animation-delay: -4s;
+}
+
+.landing-shimmer {
+  animation: landing-shimmer 2.5s ease-in-out infinite;
+}
+
 /* Wood background simulating physical desk */
 .wood-desk {
   background: 

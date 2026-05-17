@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Building2, Sparkles } from 'lucide-react';
+import { WanisLogo } from './WanisLogo';
 
 interface CareHomeSetupModalProps {
   defaultName: string;
@@ -34,6 +35,9 @@ export const CareHomeSetupModal: React.FC<CareHomeSetupModalProps> = ({
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
       <div className="bg-[#f4ecd8] border-2 border-[#c9a84c] rounded-2xl max-w-md w-full shadow-2xl p-6 text-[#2c1e16]">
+        <div className="flex justify-center mb-4">
+          <WanisLogo variant="stacked" size={56} theme="light" tagline="مرحباً بك" />
+        </div>
         <div className="flex items-center gap-2 text-[#a08131] font-bold text-sm mb-2">
           <Sparkles size={16} />
           <span>إعداد دارك الخاصة</span>
@@ -41,6 +45,7 @@ export const CareHomeSetupModal: React.FC<CareHomeSetupModalProps> = ({
         <h2 className="text-2xl font-amiri font-bold mb-2">مرحباً بك في ونيس</h2>
         <p className="text-sm text-[#593119] font-cairo mb-6 leading-relaxed">
           كل حساب له <strong>دار رعاية مستقلة</strong>. لن يرى الآخرون نزلاءك أو حكاياتك.
+          ستجد في مكتبتك <strong>٤ كتب حياة نموذجية</strong> (صالح، نورة، إبراهيم، لطيفة) لتجربة التطبيق — يمكنك حذفها أو إضافة نزلائك الحقيقيين.
           اختر اسماً لدارك للبدء.
         </p>
 

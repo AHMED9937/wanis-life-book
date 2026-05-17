@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Resident } from '../types';
 import { BookOpen, Mic, Sparkles, ChevronLeft, Loader2, Search, X } from 'lucide-react';
+import { WanisLogoMark } from './WanisLogo';
 import { residentSearchBlob, searchMatches } from '../lib/search';
 
 interface LibraryProps {
@@ -72,6 +73,13 @@ export const Library: React.FC<LibraryProps> = ({
         
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
+            <div className="flex items-center gap-3 mb-3">
+              <WanisLogoMark size={48} />
+              <div>
+                <p className="font-amiri font-bold text-xl text-[#2c1e16] leading-none">ونيس</p>
+                <p className="text-[10px] font-cairo text-[#a08131]">مكتبة حكايات الدار</p>
+              </div>
+            </div>
             <div className="flex items-center gap-2 text-[#a08131] font-bold text-sm mb-1">
               <Sparkles size={16} />
               <span>مفهوم "كتاب الحياة" المخصص لكبار السن</span>

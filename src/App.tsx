@@ -1,4 +1,4 @@
-import { SignInButton, SignUpButton, SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
 import { useCallback, useEffect, useState } from 'react';
 import { CaregiverHeader } from './components/CaregiverHeader';
 import { Library } from './components/Library';
@@ -10,6 +10,8 @@ import { ContiguousPrintView } from './components/ContiguousPrintView';
 import { CreateResidentModal } from './components/CreateResidentModal';
 import { Resident, Story } from './types';
 import { CareHomeSetupModal } from './components/CareHomeSetupModal';
+import { LandingPage } from './components/LandingPage';
+import { WanisLogoMark } from './components/WanisLogo';
 import {
   createResident,
   createStory,
@@ -264,27 +266,7 @@ export default function App() {
   return (
     <>
       <SignedOut>
-        <div className="wood-desk min-h-screen flex items-center justify-center p-6">
-          <div className="bg-[#f4ecd8] rounded-xl p-6 shadow-2xl border-2 border-[#c9a84c] max-w-md w-full">
-            <h1 className="text-2xl font-amiri font-bold text-[#2c1e16]">تسجيل الدخول</h1>
-            <p className="mt-2 text-sm font-cairo text-[#593119]">
-              يلزم تسجيل الدخول للمتابعة إلى مكتبة كتب الحياة.
-            </p>
-            <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center">
-              <SignInButton mode="modal">
-                <button className="px-5 py-2 rounded-md bg-gradient-to-r from-[#c9a84c] to-[#a08131] hover:from-[#e3c778] hover:to-[#c9a84c] text-[#1c120a] font-bold shadow cursor-pointer">
-                  تسجيل الدخول
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="px-5 py-2 rounded-md bg-[#3a2010] hover:bg-[#4d2a15] text-[#f4ecd8] font-semibold border border-[#c9a84c]/30 shadow cursor-pointer">
-                  إنشاء حساب
-                </button>
-              </SignUpButton>
-            </div>
-            
-          </div>
-        </div>
+        <LandingPage />
       </SignedOut>
 
       <SignedIn>
@@ -428,8 +410,12 @@ export default function App() {
           {/* Custom nostalgic static desktop footer */}
           <footer className="bg-[#1c120a]/90 text-center py-4 text-xs text-gray-500 border-t border-[#3a2010] no-print">
             <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-              <p>
-                <strong>ونيس (Wanis)</strong> — تصميم الواجهات وتجربة المستخدم المخصصة لرعاية كبار السن © {new Date().getFullYear()}
+              <p className="flex items-center justify-center sm:justify-start gap-2">
+                <WanisLogoMark size={28} className="opacity-90" />
+                <span>
+                  <strong className="text-[#c9a84c]">ونيس (Wanis)</strong> — كتاب الحياة لرعاية كبار السن ©{' '}
+                  {new Date().getFullYear()}
+                </span>
               </p>
               <div className="flex items-center gap-4 text-[#c9a84c]">
                 <span>التوافقية: WCAG AAA</span>

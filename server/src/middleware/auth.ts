@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { clerkMiddleware, getAuth, clerkClient } from "@clerk/express";
 import { prisma } from "../lib/prisma.js";
+import { seedDemoLibraryForCareHome } from "../lib/demoResidents.js";
 import { env } from "../config/env.js";
 
 // Export the Clerk middleware to be used in the app
@@ -77,6 +78,9 @@ const clerkId = auth.userId;
           careHomeId: personalCareHome.id,
         },
       });
+
+      // Private copy of sample life books (explains the app — not shared with other accounts)
+      await seedDemoLibraryForCareHome(prisma, personalCareHome.id, user.id);
     }
 
     // Inject the user into the request context

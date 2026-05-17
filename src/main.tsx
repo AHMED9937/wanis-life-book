@@ -3,6 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import { WanisLogo } from "./components/WanisLogo";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -15,7 +16,10 @@ createRoot(document.getElementById("root")!).render(
     ) : (
       <div className="wood-desk min-h-screen flex items-center justify-center p-6">
         <div className="bg-[#f4ecd8] rounded-xl p-6 shadow-2xl border-2 border-[#c9a84c] max-w-lg w-full">
-          <h1 className="text-2xl font-amiri font-bold text-[#2c1e16]">Clerk setup required</h1>
+          <div className="flex justify-center mb-4">
+            <WanisLogo variant="stacked" size={56} theme="light" />
+          </div>
+          <h1 className="text-2xl font-amiri font-bold text-[#2c1e16] text-center">Clerk setup required</h1>
           <p className="mt-2 text-sm font-cairo text-[#593119]">
             Create a <code className="bg-black/10 px-1 rounded">.env.local</code> file in the project root and add:
           </p>
