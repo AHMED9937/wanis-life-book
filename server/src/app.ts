@@ -1,3 +1,4 @@
+import "./types/express.js";
 import express, { Request, Response, NextFunction } from "express";
 import { prisma } from "./lib/prisma.js";
 import { clerkAuth, protectRoute, resolveTenant } from "./middleware/auth.js";
