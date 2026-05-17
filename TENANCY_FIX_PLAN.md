@@ -46,15 +46,15 @@ Each Clerk account → one `User` row → **one private `CareHome`** → residen
 
 ## Fix plan (phases)
 
-### Phase 1 — Stop the bleeding (required) ✅ Done
+### Phase 1  Stop the bleeding (required) ✅ Done
 
 | Task | File | Action |
 |------|------|--------|
 | 1.1 | `auth.ts` | On first login, **create a new `CareHome` per user** (e.g. `دار {fullName}`), do **not** reuse `"Unassigned"` |
 | 1.2 | `seed.ts` | Put demo residents in **`Wanis Demo`** care home, link only to seed admin user |
-| 1.3 | — | New signups get **empty library** (their own home) |
+| 1.3 |  | New signups get **empty library** (their own home) |
 
-### Phase 2 — Repair existing production data (run once) ✅ Script: `npm run migrate:tenants`
+### Phase 2  Repair existing production data (run once) ✅ Script: `npm run migrate:tenants`
 
 | Task | Action |
 |------|--------|
@@ -62,7 +62,7 @@ Each Clerk account → one `User` row → **one private `CareHome`** → residen
 | 2.2 | Reassign residents | Move each resident to the care home of the user who **first recorded a story** for that resident |
 | 2.3 | Demo data | Keep sample residents on **Wanis Demo**; only `admin@wanis.app` (or no real users) stays attached to demo |
 
-### Phase 3 — Hardening (recommended) ✅ Partial
+### Phase 3  Hardening (recommended) ✅ Partial
 
 | Task | Action | Status |
 |------|--------|--------|
@@ -72,7 +72,7 @@ Each Clerk account → one `User` row → **one private `CareHome`** → residen
 | 3.4 | Invite model (later) | Staff join same home via invite code | Not started |
 | 3.5 | Audit tests | Two Clerk users isolation test | Not started |
 
-### Phase 4 — Clerk / orgs (optional, later)
+### Phase 4  Clerk / orgs (optional, later)
 
 Use Clerk Organizations so one care facility = one org, many staff accounts share **one** home **intentionally**.
 

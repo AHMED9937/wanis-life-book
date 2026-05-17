@@ -113,7 +113,7 @@ const parseArabicDuration = (dur: string): number => {
 async function main() {
   console.log('🌱 Starting database seed...');
 
-  // 1. Demo care home only (not shared with real signups — see auth.ts)
+  // 1. Demo care home only (not shared with real signups  see auth.ts)
   let careHome = await prisma.careHome.findFirst({ where: { name: 'Wanis Demo' } });
   if (!careHome) {
     careHome = await prisma.careHome.create({

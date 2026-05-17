@@ -1,4 +1,4 @@
-# Wanis (ونيس) — App Structure (Vite + React + TypeScript + Tailwind)
+# Wanis (ونيس)  App Structure (Vite + React + TypeScript + Tailwind)
 
 This document describes the current structure of the app based on the code in this repo.
 
@@ -41,10 +41,10 @@ A single-page React app that simulates a “Life Book” system for a care home.
 This is the **application controller** (top-level state + view switching).
 
 **Main state:**
-- `residents: Resident[]` — loaded from localStorage via `getStoredResidents()`
+- `residents: Resident[]`  loaded from localStorage via `getStoredResidents()`
 - `view: 'library' | 'book' | 'print_entire'`
 - `selectedResidentId: string | null`
-- `page: number` — internal “book page” index when `view === 'book'`
+- `page: number`  internal “book page” index when `view === 'book'`
 - `isCreateModalOpen: boolean`
 - `toastMessage: string | null`
 

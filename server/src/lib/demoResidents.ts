@@ -1,6 +1,6 @@
 import { CoverStyle, type PrismaClient } from "@prisma/client";
 
-/** Starter library — explains the app (one private copy per account). */
+/** Starter library  explains the app (one private copy per account). */
 export const DEMO_RESIDENTS_TEMPLATE = [
   {
     name: "صالح العبدالله",

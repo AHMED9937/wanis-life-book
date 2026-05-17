@@ -45,7 +45,7 @@ export const CareHomeSetupModal: React.FC<CareHomeSetupModalProps> = ({
         <h2 className="text-2xl font-amiri font-bold mb-2">مرحباً بك في ونيس</h2>
         <p className="text-sm text-[#593119] font-cairo mb-6 leading-relaxed">
           كل حساب له <strong>دار رعاية مستقلة</strong>. لن يرى الآخرون نزلاءك أو حكاياتك.
-          ستجد في مكتبتك <strong>٤ كتب حياة نموذجية</strong> (صالح، نورة، إبراهيم، لطيفة) لتجربة التطبيق — يمكنك حذفها أو إضافة نزلائك الحقيقيين.
+          ستجد في مكتبتك <strong>٤ كتب حياة نموذجية</strong> (صالح، نورة، إبراهيم، لطيفة) لتجربة التطبيق  يمكنك حذفها أو إضافة نزلائك الحقيقيين.
           اختر اسماً لدارك للبدء.
         </p>
 

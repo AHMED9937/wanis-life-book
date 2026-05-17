@@ -251,7 +251,7 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
                           : "الاستماع الصوتي للذكريات (TTS)"}
                     </span>
                     <span className={`text-[11px] block font-cairo ${ttsError ? 'text-[#7a2f2f]' : 'text-gray-500'}`}>
-                      {ttsError ?? "قراءة عربية واضحة (صوت زارية — السعودية)"}
+                      {ttsError ?? "قراءة عربية واضحة (صوت زارية  السعودية)"}
                     </span>
                   </div>
                 </div>
@@ -268,7 +268,7 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
               </div>
             </div>
 
-            {/* The Core Narrative Text — Set to Minimum 20px with High Line Height */}
+            {/* The Core Narrative Text  Set to Minimum 20px with High Line Height */}
             <div className="text-right py-2">
               <p className={`story-body-text whitespace-pre-line text-justify ${isPlaying ? 'bg-[#c9a84c]/10 rounded-lg p-2 transition-all' : ''}`}>
                 {story.content}

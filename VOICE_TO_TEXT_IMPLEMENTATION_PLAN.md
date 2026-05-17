@@ -39,7 +39,7 @@ Use browser-native **Web Speech API** (`SpeechRecognition` / `webkitSpeechRecogn
 
 ## 4) Implementation Phases
 
-## Phase A — Speech Recognition Foundation
+## Phase A  Speech Recognition Foundation
 **Files:**
 - `src/components/RecordStoryView.tsx`
 - (optional) `src/types/speech.ts` or inline local types in component
@@ -59,7 +59,7 @@ Use browser-native **Web Speech API** (`SpeechRecognition` / `webkitSpeechRecogn
 
 ---
 
-## Phase B — Replace Mock Flow in Record Screen
+## Phase B  Replace Mock Flow in Record Screen
 **File:**
 - `src/components/RecordStoryView.tsx`
 
@@ -75,7 +75,7 @@ Use browser-native **Web Speech API** (`SpeechRecognition` / `webkitSpeechRecogn
 
 ---
 
-## Phase C — Update UX Copy (Remove AI Claims)
+## Phase C  Update UX Copy (Remove AI Claims)
 **Files:**
 - `src/components/BookIndexView.tsx`
 - `src/components/RecordStoryView.tsx`
@@ -90,7 +90,7 @@ Use browser-native **Web Speech API** (`SpeechRecognition` / `webkitSpeechRecogn
 
 ---
 
-## Phase D — Robustness + Edge Cases
+## Phase D  Robustness + Edge Cases
 **Files:**
 - `src/components/RecordStoryView.tsx`
 
@@ -103,7 +103,7 @@ Use browser-native **Web Speech API** (`SpeechRecognition` / `webkitSpeechRecogn
 
 ---
 
-## Phase E — Verification
+## Phase E  Verification
 **Commands:**
 1. `npm run build`
 

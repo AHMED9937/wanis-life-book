@@ -13,7 +13,7 @@
 | 3 | Results stored in React state: `residents` |
 | 4 | `Library.tsx` filters that array **in the browser only** |
 
-There is **no mock resident list** in `src/`. The demo names (صالح العبدالله, نورة السالم, …) come from **`prisma/seed.ts`** written into the database — they look like mock data but are real DB rows.
+There is **no mock resident list** in `src/`. The demo names (صالح العبدالله, نورة السالم, …) come from **`prisma/seed.ts`** written into the database  they look like mock data but are real DB rows.
 
 So the problem is **not** “mock vs database.” The problems are:
 
@@ -39,7 +39,7 @@ So the problem is **not** “mock vs database.” The problems are:
 - No `?q=` API call when the user types.
 - If the server failed or returned `[]`, search has nothing to filter.
 
-### 2. `nickname` is fake — not from database
+### 2. `nickname` is fake  not from database
 
 Schema has **no** `nickname` column:
 
@@ -64,9 +64,9 @@ Seed has `nickname: 'أبو محمد'` but it is **discarded** when seeding. Sea
 
 Users may search by:
 
-- Book title (`coverTitle` / `lifeBook.bookTitle`) — **not searched**
-- First name only — works only inside full `name`
-- Room with Western digits `104` — DB may have `١٠٤` — **no match**
+- Book title (`coverTitle` / `lifeBook.bookTitle`)  **not searched**
+- First name only  works only inside full `name`
+- Room with Western digits `104`  DB may have `١٠٤`  **no match**
 
 ### 4. Weak matching
 
@@ -82,17 +82,17 @@ Users may search by:
 
 ## Solution plan (recommended order)
 
-### Phase A — Quick fix (1–2 hours) — better client search
+### Phase A  Quick fix (1–2 hours)  better client search
 
 **Goal:** Make search work correctly on DB-loaded data without schema changes.
 
 | Task | File | Change |
 |------|------|--------|
-| A1 | `src/lib/search.ts` (new) | `normalizeArabicSearch(text)` — lowercase, strip diacritics, map Arabic digits → Western |
+| A1 | `src/lib/search.ts` (new) | `normalizeArabicSearch(text)`  lowercase, strip diacritics, map Arabic digits → Western |
 | A2 | `Library.tsx` | Search: `name`, `coverTitle`, `roomNumber`, `nickname`, first/last word split |
 | A3 | `Library.tsx` | Use normalized compare: `normalize(haystack).includes(normalize(needle))` |
-| A4 | `api.ts` `mapResident` | Set `nickname` from `lifeBook.bookTitle` or first name only if no DB field — **or** drop nickname from search until Phase B |
-| A5 | `App.tsx` | After `createResident`, `loadResidents()` already runs — verify list refreshes |
+| A4 | `api.ts` `mapResident` | Set `nickname` from `lifeBook.bookTitle` or first name only if no DB field  **or** drop nickname from search until Phase B |
+| A5 | `App.tsx` | After `createResident`, `loadResidents()` already runs  verify list refreshes |
 
 **Acceptance:**
 
@@ -103,7 +103,7 @@ Users may search by:
 
 ---
 
-### Phase B — Database + API search (half day)
+### Phase B  Database + API search (half day)
 
 **Goal:** Search the database (scalable, correct for large lists).
 
@@ -112,7 +112,7 @@ Users may search by:
 | B1 | `prisma/schema.prisma` | Optional: add `nickname String?` on `Resident` |
 | B2 | Migration | `npx prisma migrate dev` |
 | B3 | `seed.ts` | Persist `resData.nickname` when seeding |
-| B4 | `server/src/routes/residents.ts` | `GET /?q=` — Prisma `where` with `OR` on `firstName`, `lastName`, `roomNumber`, `lifeBook.bookTitle`, `nickname` (case-insensitive `contains` / `mode: 'insensitive'`) |
+| B4 | `server/src/routes/residents.ts` | `GET /?q=`  Prisma `where` with `OR` on `firstName`, `lastName`, `roomNumber`, `lifeBook.bookTitle`, `nickname` (case-insensitive `contains` / `mode: 'insensitive'`) |
 | B5 | `src/lib/api.ts` | `fetchResidents(token, query?: string)` |
 | B6 | `Library.tsx` | Debounce 300ms → call API with `q`, show loading spinner in search box |
 | B7 | `App.tsx` | Pass search handler or lift `searchTerm` + refetch |
@@ -145,7 +145,7 @@ where: {
 
 ---
 
-### Phase C — Polish
+### Phase C  Polish
 
 - Show result count: `٣ نتائج`
 - Highlight matched text on cards (optional)
@@ -172,7 +172,7 @@ where: {
 
 - Removing mock data from frontend (there is none)
 - Replacing PostgreSQL
-- Changing Clerk auth (unless residents list is empty due to 401 — then fix server/login first)
+- Changing Clerk auth (unless residents list is empty due to 401  then fix server/login first)
 
 ---
 
@@ -180,7 +180,7 @@ where: {
 
 1. Run backend: `npm run dev:server`
 2. Open DB tool or: `npx prisma studio`
-3. Check table `residents` — rows should match library cards
+3. Check table `residents`  rows should match library cards
 4. Create a new resident in UI → new row in DB → appears after refresh / reload residents
 5. Network tab: `GET /api/residents` returns JSON `{ data: [...] }`
 
@@ -188,9 +188,9 @@ where: {
 
 ## Recommended implementation order
 
-1. **Phase A** — fixes most user-visible search bugs today  
-2. **Phase B** — when you have many residents or need nickname in DB  
-3. **Phase C** — UX polish  
+1. **Phase A**  fixes most user-visible search bugs today  
+2. **Phase B**  when you have many residents or need nickname in DB  
+3. **Phase C**  UX polish  
 
 ---
 
@@ -201,9 +201,9 @@ where: {
 | Investigation | Done |
 | Phase A | **Done** (`src/lib/search.ts`, `Library.tsx` client filter) |
 | Phase B | **Done** (`GET /api/residents?q=`, `nickname` column, debounced search) |
-| Phase C | Partial (result count, clear button — done; highlight optional) |
+| Phase C | Partial (result count, clear button  done; highlight optional) |
 
-### After deploy — run migration
+### After deploy  run migration
 
 ```bash
 npx prisma migrate deploy

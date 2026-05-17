@@ -130,7 +130,7 @@ export default function App() {
     const updated = await updateCareHome(token, { name });
     setCareHomeName(updated.name);
     setNeedsCareHomeSetup(false);
-    showToast('✅ تم إعداد دارك بنجاح — بياناتك خاصة بحسابك فقط');
+    showToast('✅ تم إعداد دارك بنجاح  بياناتك خاصة بحسابك فقط');
     await loadResidents('');
   };
 
@@ -413,7 +413,7 @@ export default function App() {
               <p className="flex items-center justify-center sm:justify-start gap-2">
                 <WanisLogoMark size={28} className="opacity-90" />
                 <span>
-                  <strong className="text-[#c9a84c]">ونيس (Wanis)</strong> — كتاب الحياة لرعاية كبار السن ©{' '}
+                  <strong className="text-[#c9a84c]">ونيس (Wanis)</strong>  كتاب الحياة لرعاية كبار السن ©{' '}
                   {new Date().getFullYear()}
                 </span>
               </p>

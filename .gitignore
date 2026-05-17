@@ -4,7 +4,7 @@ server/dist
 .vercel
 *.log
 
-# Secrets — never commit
+# Secrets  never commit
 .env
 .env.local
 .env.*.local

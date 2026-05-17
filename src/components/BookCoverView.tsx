@@ -110,7 +110,7 @@ export const BookCoverView: React.FC<BookCoverViewProps> = ({
 
       {/* Helpful Hint */}
       <div className="mt-6 text-center text-xs text-[#f4ecd8]/60 bg-black/40 px-4 py-2 rounded-full border border-white/5">
-        📖 اتجاه التصفح عربي أصيل (من اليمين إلى اليسار) — انقر لفتح الغلاف الأيمن
+        📖 اتجاه التصفح عربي أصيل (من اليمين إلى اليسار)  انقر لفتح الغلاف الأيمن
       </div>
 
     </div>

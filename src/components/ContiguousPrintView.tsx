@@ -119,7 +119,7 @@ export const ContiguousPrintView: React.FC<ContiguousPrintViewProps> = ({
 
               {/* Page footer numbering */}
               <div className="text-center mt-6 text-[11px] text-gray-400 font-mono">
-                كتاب حياة {resident.nickname} — صفحة {index + 3}
+                كتاب حياة {resident.nickname}  صفحة {index + 3}
               </div>
 
             </div>

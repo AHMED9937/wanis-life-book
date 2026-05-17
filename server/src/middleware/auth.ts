@@ -51,7 +51,7 @@ const clerkId = auth.userId;
       const fullName = `${clerkUser.firstName ?? ""} ${clerkUser.lastName ?? ""}`.trim();
       const avatarUrl = clerkUser.imageUrl;
 
-      // Each account gets its own care home — never share "Unassigned" across users
+      // Each account gets its own care home  never share "Unassigned" across users
       const careHomeName =
         fullName && fullName !== "Unknown User"
           ? `دار ${fullName}`
@@ -79,7 +79,7 @@ const clerkId = auth.userId;
         },
       });
 
-      // Private copy of sample life books (explains the app — not shared with other accounts)
+      // Private copy of sample life books (explains the app  not shared with other accounts)
       await seedDemoLibraryForCareHome(prisma, personalCareHome.id, user.id);
     }
 

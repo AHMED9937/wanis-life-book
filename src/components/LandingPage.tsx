@@ -44,22 +44,22 @@ const FEATURES = [
   {
     icon: Library,
     title: 'مكتبة حكايات الدار',
-    desc: 'كل نزيل له كتاب حياة على الرف — غلاف فاخر، فهرس فصول، وبحث فوري بالاسم أو الكنية أو رقم الغرفة.',
+    desc: 'كل نزيل له كتاب حياة على الرف  غلاف فاخر، فهرس فصول، وبحث فوري بالاسم أو الكنية أو رقم الغرفة.',
   },
   {
     icon: Mic,
     title: 'تسجيل شفهي بالعربية',
-    desc: 'الميكروفون الذهبي يحوّل كلام كبار السن إلى نص عربي مباشرة — ثم تحريره وحفظه كفصل جديد.',
+    desc: 'الميكروفون الذهبي يحوّل كلام كبار السن إلى نص عربي مباشرة  ثم تحريره وحفظه كفصل جديد.',
   },
   {
     icon: Volume2,
     title: 'استماع بصوت عربي',
-    desc: 'زر التشغيل يقرأ الحكاية بصوت زريّة العصري — مريح للنزيل وللعائلة وللفريق.',
+    desc: 'زر التشغيل يقرأ الحكاية بصوت زريّة العصري  مريح للنزيل وللعائلة وللفريق.',
   },
   {
     icon: Printer,
     title: 'طباعة كتاب كامل',
-    desc: 'اطبع كل الفصول دفعة واحدة بتنسيق أنيق — حدود ذهبية وخط أميري كبير للقراءة الورقية.',
+    desc: 'اطبع كل الفصول دفعة واحدة بتنسيق أنيق  حدود ذهبية وخط أميري كبير للقراءة الورقية.',
   },
   {
     icon: Search,
@@ -69,12 +69,12 @@ const FEATURES = [
   {
     icon: Lock,
     title: 'خصوصية كل دار',
-    desc: 'كل حساب له دار رعاية مستقلة — لا يرى أحد نزلاءك أو حكاياتك. مصادقة آمنة عبر Clerk.',
+    desc: 'كل حساب له دار رعاية مستقلة  لا يرى أحد نزلاءك أو حكاياتك. مصادقة آمنة عبر Clerk.',
   },
 ] as const;
 
 const STEPS = [
-  { n: '١', title: 'أنشئ حسابك', desc: 'سجّل دخولك وسمِّ دارك — تحصل فوراً على ٤ كتب نموذجية لتجربة التطبيق.' },
+  { n: '١', title: 'أنشئ حسابك', desc: 'سجّل دخولك وسمِّ دارك  تحصل فوراً على ٤ كتب نموذجية لتجربة التطبيق.' },
   { n: '٢', title: 'أضف نزيلاً أو افتح نموذجاً', desc: 'من المكتبة: كتاب جديد بغلاف ولون، أو استكشف كتب صالح ونورة وإبراهيم ولطيفة النموذجية.' },
   { n: '٣', title: 'سجّل ووثّق', desc: 'افتح الفهرس → الميكروفون → احكِ الذكريات → راجع النص → احفظ الفصل.' },
   { n: '٤', title: 'شارك واطبع', desc: 'اقرأ بصوت عالٍ، اطبع الكتاب للعائلة، واحفظ تراث الدار للأجيال.' },
@@ -98,7 +98,7 @@ function AuthButtons({ size = 'md' }: { size?: 'md' | 'lg' }) {
           type="button"
           className={`${pad} w-full sm:w-auto rounded-full bg-gradient-to-r from-[#c9a84c] to-[#a08131] hover:from-[#e3c778] hover:to-[#c9a84c] text-[#1c120a] font-bold shadow-lg shadow-[#c9a84c]/25 cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.98] font-cairo`}
         >
-          ابدأ مجاناً — إنشاء حساب
+          ابدأ مجاناً  إنشاء حساب
         </button>
       </SignUpButton>
       <SignInButton mode="modal">
@@ -106,7 +106,7 @@ function AuthButtons({ size = 'md' }: { size?: 'md' | 'lg' }) {
           type="button"
           className={`${pad} w-full sm:w-auto rounded-full bg-[#3a2010]/80 hover:bg-[#4d2a15] text-[#f4ecd8] font-semibold border border-[#c9a84c]/40 cursor-pointer transition-all font-cairo backdrop-blur-sm`}
         >
-          لدي حساب — تسجيل الدخول
+          لدي حساب  تسجيل الدخول
         </button>
       </SignInButton>
     </div>
@@ -204,12 +204,12 @@ export function LandingPage() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <div className="mb-8">
-              <WanisLogo variant="stacked" size={72} tagline="رفيق الحكاية — كتاب الحياة" />
+              <WanisLogo variant="stacked" size={72} tagline="رفيق الحكاية  كتاب الحياة" />
             </div>
 
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c9a84c]/15 border border-[#c9a84c]/30 text-[#e3c778] text-xs font-bold font-cairo mb-6">
               <Sparkles size={14} />
-              <span>مبادرة التوثيق الشفهي — مصمّم لدور الرعاية</span>
+              <span>مبادرة التوثيق الشفهي  مصمّم لدور الرعاية</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-amiri font-bold text-[#f4ecd8] leading-[1.15] mb-5">
@@ -223,7 +223,7 @@ export function LandingPage() {
 
             <p className="text-lg text-[#e8ddc4]/90 font-cairo leading-relaxed max-w-xl mb-8">
               <strong className="text-[#c9a84c]">ونيس (Wanis)</strong> يحوّل ذكريات كبار السن إلى مكتبة رقمية
-              أنيقة: غلاف فاخر، فصول مسجّلة، قراءة صوتية عربية، وطباعة كاملة — في واجهة عربية كاملة
+              أنيقة: غلاف فاخر، فصول مسجّلة، قراءة صوتية عربية، وطباعة كاملة  في واجهة عربية كاملة
               مريحة للأخصائيين والعائلات.
             </p>
 
@@ -237,7 +237,7 @@ export function LandingPage() {
                 <Headphones size={14} /> صوت عربي زريّة
               </span>
               <span className="flex items-center gap-1.5">
-                <Heart size={14} /> WCAG AAA — خط كبير
+                <Heart size={14} /> WCAG AAA  خط كبير
               </span>
             </div>
           </div>
@@ -289,8 +289,8 @@ export function LandingPage() {
           <div className="max-w-3xl relative z-10">
             <h2 className="text-2xl md:text-3xl font-amiri font-bold mb-4">ما هو ونيس؟</h2>
             <p className="font-cairo text-[#593119] leading-relaxed text-base md:text-lg">
-              تطبيق ويب عربي (RTL) لموظفي الرعاية وأسر النزلاء: يجمع <strong>مكتبة كتب الحياة</strong> على
-              مكتب خشبي افتراضي — كل كتاب له غلاف جلدي ملوّن، فهرس فصول، تسجيل صوتي يتحول لنص، قارئ
+              تطبيق ويب عربي لموظفي الرعاية وأسر النزلاء: يجمع <strong>مكتبة كتب الحياة</strong> على
+              مكتب خشبي افتراضي  كل كتاب له غلاف جلدي ملوّن، فهرس فصول، تسجيل صوتي يتحول لنص، قارئ
               صوتي بالعربية، وطباعة احترافية. عند التسجيل الأول تحصل على{' '}
               <strong>٤ كتب نموذجية</strong> (صالح، نورة، إبراهيم، لطيفة) لتفهم التطبيق قبل إضافة نزلائك الحقيقيين.
             </p>
@@ -347,7 +347,7 @@ export function LandingPage() {
         <div className="bg-[#f4ecd8]/95 rounded-2xl p-8 md:p-10 border-2 border-[#c9a84c] text-[#2c1e16]">
           <h2 className="text-2xl md:text-3xl font-amiri font-bold text-center mb-2">رحلة واحدة من المكتبة إلى الطباعة</h2>
           <p className="text-center font-cairo text-[#593119] mb-10 max-w-2xl mx-auto">
-            كل شاشة مصممة كتجربة كتاب حقيقي — ليس مجرد نماذج بيانات.
+            كل شاشة مصممة كتجربة كتاب حقيقي  ليس مجرد نماذج بيانات.
           </p>
 
           <div className="flex flex-wrap justify-center gap-2 md:gap-0 md:flex-nowrap items-center mb-10">
@@ -396,7 +396,7 @@ export function LandingPage() {
           </div>
           <h2 className="text-3xl font-amiri font-bold">٤ كتب نموذجية في مكتبتك</h2>
           <p className="mt-3 font-cairo text-[#e8ddc4]/80 max-w-xl mx-auto text-sm">
-            نسخة خاصة بحسابك — ليست مشتركة مع الآخرين. جرّب التسجيل والطباعة والصوت قبل إضافة نزلائك.
+            نسخة خاصة بحسابك  ليست مشتركة مع الآخرين. جرّب التسجيل والطباعة والصوت قبل إضافة نزلائك.
           </p>
         </div>
 
@@ -417,15 +417,15 @@ export function LandingPage() {
       <section id="privacy" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-20">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-3xl font-amiri font-bold mb-4">بياناتك ملكك — دارك وحدها</h2>
+            <h2 className="text-3xl font-amiri font-bold mb-4">بياناتك ملكك  دارك وحدها</h2>
             <ul className="space-y-4 font-cairo text-[#e8ddc4]/85 text-sm leading-relaxed">
               <li className="flex gap-3">
                 <Lock className="shrink-0 text-[#c9a84c]" size={20} />
-                <span>كل مستخدم جديد يحصل على <strong>دار رعاية مستقلة</strong> — لا تشارك النزلاء مع حسابات أخرى.</span>
+                <span>كل مستخدم جديد يحصل على <strong>دار رعاية مستقلة</strong>  لا تشارك النزلاء مع حسابات أخرى.</span>
               </li>
               <li className="flex gap-3">
                 <Shield className="shrink-0 text-[#c9a84c]" size={20} />
-                <span>تسجيل الدخول عبر <strong>Clerk</strong> — جلسات آمنة لكل أخصائي.</span>
+                <span>تسجيل الدخول عبر <strong>Clerk</strong>  جلسات آمنة لكل أخصائي.</span>
               </li>
               <li className="flex gap-3">
                 <Sparkles className="shrink-0 text-[#c9a84c]" size={20} />
@@ -437,13 +437,13 @@ export function LandingPage() {
             <WanisLogoMark size={80} className="mb-3" />
             <p className="font-amiri text-3xl text-[#c9a84c] mb-2">ونيس</p>
             <p className="font-cairo text-sm text-[#e8ddc4]/70">
-              مصمم لرعاية كبار السن — واجهة عربية، خطوط كبيرة، وتباين عالٍ
+              مصمم لرعاية كبار السن  واجهة عربية، خطوط كبيرة، وتباين عالٍ
             </p>
           </div>
         </div>
       </section>
 
-      {/* Credits — team & supervisor */}
+      {/* Credits  team & supervisor */}
       <section id="credits" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-20">
         <div className="relative rounded-2xl overflow-hidden border-2 border-[#c9a84c] bg-[#f4ecd8] text-[#2c1e16] shadow-2xl">
           <div className="absolute top-0 right-0 w-40 h-40 bg-[#c9a84c]/15 rounded-bl-[100%] pointer-events-none" />
@@ -453,7 +453,7 @@ export function LandingPage() {
             <div className="text-center mb-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c9a84c]/20 border border-[#c9a84c]/40 text-[#a08131] text-xs font-bold font-cairo mb-4">
                 <Heart size={14} className="text-[#7a2f2f]" fill="currentColor" />
-                <span>صُنع بأيدٍ طلابية — لخدمة كبار السن</span>
+                <span>صُنع بأيدٍ طلابية  لخدمة كبار السن</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-amiri font-bold text-[#2c1e16] mb-3">
                 من ابتكر ونيس؟
@@ -530,7 +530,7 @@ export function LandingPage() {
               ابدأ توثيق حكايات دارك اليوم
             </h2>
             <p className="font-cairo text-[#e8ddc4]/80 mb-8 max-w-lg mx-auto">
-              أنشئ حساباً مجاناً، سمِّ دارك، وافتح أول كتاب حياة — النماذج الأربعة في انتظارك.
+              أنشئ حساباً مجاناً، سمِّ دارك، وافتح أول كتاب حياة  النماذج الأربعة في انتظارك.
             </p>
             <AuthButtons size="lg" />
           </div>
@@ -543,7 +543,7 @@ export function LandingPage() {
           <p className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 text-center sm:text-right">
             <WanisLogoMark size={28} />
             <span>
-            <strong className="text-[#c9a84c]">ونيس (Wanis)</strong> — كتاب الحياة لرعاية كبار السن ©{' '}
+            <strong className="text-[#c9a84c]">ونيس (Wanis)</strong>  كتاب الحياة لرعاية كبار السن ©{' '}
             {new Date().getFullYear()}
             </span>
             <button
@@ -551,7 +551,7 @@ export function LandingPage() {
               onClick={() => scrollTo('credits')}
               className="block mt-1 text-[#c9a84c]/70 hover:text-[#c9a84c] cursor-pointer transition-colors"
             >
-              صُنع بفريق طلابي — بإشراف {TEAM_SUPERVISOR}
+              صُنع بفريق طلابي  بإشراف {TEAM_SUPERVISOR}
             </button>
           </p>
           <div className="flex items-center gap-4 text-[#c9a84c]/80">

@@ -15,7 +15,7 @@ export interface WanisLogoProps {
   onClick?: () => void;
 }
 
-/** Open-book companion mark — emerald cover, gold spine, story lines, gentle voice arcs */
+/** Open-book companion mark  emerald cover, gold spine, story lines, gentle voice arcs */
 export function WanisLogoMark({
   size = 40,
   className = '',
@@ -62,7 +62,7 @@ export function WanisLogoMark({
         </filter>
       </defs>
 
-      {/* Badge — protective frame for care homes */}
+      {/* Badge  protective frame for care homes */}
       <rect
         x="4"
         y="4"
@@ -85,7 +85,7 @@ export function WanisLogoMark({
         strokeDasharray="3 4"
       />
 
-      {/* Voice arcs — oral history / TTS */}
+      {/* Voice arcs  oral history / TTS */}
       <path
         d="M12 28c0-4 2.5-7 6-7M12 36c0-6 3.5-10 8-10"
         stroke="#e3c778"
@@ -131,14 +131,14 @@ export function WanisLogoMark({
       <path d="M24 26h10M24 30h8M24 34h11" stroke="#a08131" strokeWidth="1.2" strokeLinecap="round" opacity="0.55" />
       <path d="M17 27h5M17 31h4" stroke="#a08131" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
 
-      {/* Heart of companionship — where memories live */}
+      {/* Heart of companionship  where memories live */}
       <path
         d="M32 44c-2.2-2.8-7-4.2-7-7.8 0-2.2 1.6-3.5 3.4-3.5 1.4 0 2.4.7 3.6 2.1 1.2-1.4 2.2-2.1 3.6-2.1 1.8 0 3.4 1.3 3.4 3.5 0 3.6-4.8 5-7 7.8z"
         fill="#c9a84c"
         fillOpacity="0.95"
       />
 
-      {/* Sparkle — dignity & celebration */}
+      {/* Sparkle  dignity & celebration */}
       <path
         d="M46 14l1.2 2.4 2.6.4-1.9 1.8.4 2.6-2.3-1.2-2.3 1.2.4-2.6-1.9-1.8 2.6-.4L46 14z"
         fill="#e3c778"
@@ -203,7 +203,7 @@ export function WanisLogo({
         type="button"
         onClick={onClick}
         className={`inline-flex items-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1c120a] ${className}`}
-        aria-label="ونيس — الصفحة الرئيسية"
+        aria-label="ونيس  الصفحة الرئيسية"
       >
         {inner}
       </button>

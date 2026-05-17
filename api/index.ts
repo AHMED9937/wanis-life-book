@@ -1,5 +1,5 @@
 /**
- * Vercel serverless entry — exports the Express app (no app.listen here).
+ * Vercel serverless entry  exports the Express app (no app.listen here).
  * Local dev still uses: npm run dev:server
  */
 import "../server/src/types/express.js";

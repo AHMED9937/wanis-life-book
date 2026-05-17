@@ -48,7 +48,7 @@ In [Clerk Dashboard](https://dashboard.clerk.com) → your app → **Domains**:
 - Add your Vercel URL: `https://your-project.vercel.app`
 - Set **Home URL** and allowed redirect URLs to match
 
-## 4. After deploy — verify
+## 4. After deploy  verify
 
 - Open the site → sign in works
 - Library loads residents (API + DB)
@@ -66,8 +66,8 @@ In [Clerk Dashboard](https://dashboard.clerk.com) → your app → **Domains**:
 npm install
 cp .env.example .env   # then fill in values
 npx prisma migrate deploy
-npm run dev:server     # terminal 1 — port 4000
-npm run dev            # terminal 2 — port 5173
+npm run dev:server     # terminal 1  port 4000
+npm run dev            # terminal 2  port 5173
 ```
 
 ## Troubleshooting

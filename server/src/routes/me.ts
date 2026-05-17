@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma.js";
 
 export const meRouter = Router();
 
-// GET /api/me — current user + care home (for onboarding)
+// GET /api/me  current user + care home (for onboarding)
 meRouter.get("/", async (req, res, next) => {
   try {
     const user = req.user!;
@@ -37,7 +37,7 @@ meRouter.get("/", async (req, res, next) => {
   }
 });
 
-// PATCH /api/me/care-home — rename facility (onboarding)
+// PATCH /api/me/care-home  rename facility (onboarding)
 meRouter.patch("/care-home", async (req, res, next) => {
   try {
     const { name, contactNumber, address } = req.body as {
