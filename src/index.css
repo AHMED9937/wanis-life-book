@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #2c1e16;
+  --paper: #f4ecd8;
+  --paper-dark: #e8ddc4;
+  --gold: #c9a84c;
+  --gold-light: #e3c778;
+  --gold-dark: #a08131;
+  --wood-light: #6a3e23;
+  --wood-dark: #3a1e0e;
+}
+
+@layer base {
+  body {
+    background-color: var(--wood-dark);
+    color: var(--ink);
+    font-family: 'Cairo', sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom font utilities */
+.font-amiri {
+  font-family: 'Amiri', serif;
+}
+.font-cairo {
+  font-family: 'Cairo', sans-serif;
+}
+
+/* Wood background simulating physical desk */
+.wood-desk {
+  background: 
+    linear-gradient(rgba(44, 30, 22, 0.85), rgba(28, 17, 10, 0.92)),
+    repeating-linear-gradient(
+      45deg,
+      #593119 0px,
+      #472511 20px,
+      #3d1f0d 40px,
+      #593119 60px
+    );
+  background-attachment: fixed;
+}
+
+/* Beautiful textured book cover */
+.book-cover-leather {
+  background: linear-gradient(135deg, #1b382b 0%, #0d2118 100%);
+  position: relative;
+}
+
+.book-cover-leather::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 0);
+  background-size: 4px 4px;
+  pointer-events: none;
+}
+
+/* 3D Perspective Container */
+.book-perspective {
+  perspective: 2500px;
+  transform-style: preserve-3d;
+}
+
+/* Smooth realistic page flip effect */
+.book-page-wrapper {
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-origin: right center; /* Spine on the right for RTL */
+}
+
+.book-page-flipped {
+  transform: rotateY(180deg);
+}
+
+/* Subtle page shadow overlay */
+.page-shadow-left {
+  background: linear-gradient(to left, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 15%);
+}
+
+.page-shadow-right {
+  background: linear-gradient(to right, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 8%);
+}
+
+/* Story Text Optimization for Elderly */
+.story-body-text {
+  font-family: 'Amiri', serif;
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem); /* Min 20px */
+  line-height: 2.2;
+  color: var(--ink);
+}
+
+/* Custom Scrollbar for list of residents / stories */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(244, 236, 216, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-dark);
+}
+
+/* --- Print Styles --- */
+@media print {
+  /* Hide the desktop UI elements, table background, header, and buttons */
+  body {
+    background: none !important;
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  .no-print, 
+  header, 
+  footer, 
+  button, 
+  .wood-desk::before,
+  .navigation-controls {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* Make sure container occupies full printable width without 3D rotation */
+  .book-perspective, 
+  .book-page-wrapper, 
+  .print-container {
+    perspective: none !important;
+    transform: none !important;
+    transition: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Page break only between multiple stories (not before the first one) */
+  .story-print-page {
+    page-break-before: auto;
+    break-before: auto;
+    padding: 2cm !important;
+    border: 3px double #c9a84c !important;
+    margin-bottom: 1cm !important;
+    background-color: #fffaf0 !important;
+  }
+
+  /* Subsequent stories start on a new page */
+  .story-print-page + .story-print-page {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Gold borders look incredible in high fidelity color prints */
+  .story-print-page h2 {
+    color: #a08131 !important;
+    border-bottom: 2px solid #c9a84c !important;
+    padding-bottom: 10px !important;
+  }
+
+  /* Ensure story body text is always readable when printed */
+  .story-body-text {
+    color: #000000 !important;
+    font-size: 14pt !important;
+    line-height: 1.8 !important;
+  }
+}

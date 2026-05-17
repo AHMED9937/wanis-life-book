@@ -1,0 +1,167 @@
+// This is your Prisma schema file.
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------
+// Enums
+// -----------------------------
+
+enum UserRole {
+  admin
+  caregiver
+
+  @@map("user_role")
+}
+
+enum Gender {
+  male
+  female
+
+  @@map("gender")
+}
+
+enum CoverStyle {
+  classic_leather
+  vintage_gold
+  forest_green
+
+  @@map("cover_style")
+}
+
+enum StoryStatus {
+  processing
+  ready
+  failed
+
+  @@map("story_status")
+}
+
+enum ShareLinkType {
+  single_story
+  full_book
+
+  @@map("share_link_type")
+}
+
+// -----------------------------
+// Models
+// -----------------------------
+
+model CareHome {
+  id            String     @id @default(uuid()) @db.Uuid
+  name          String
+  contactNumber String     @map("contact_number")
+  address       String     @db.Text
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  users         User[]
+  residents     Resident[]
+
+  @@map("care_homes")
+}
+
+model User {
+  id         String    @id @default(uuid()) @db.Uuid
+  clerkId    String    @unique @map("clerk_id")
+  careHomeId String    @db.Uuid @map("care_home_id")
+  role       UserRole
+  fullName   String    @map("full_name")
+  email      String    @unique
+  avatarUrl  String?   @map("avatar_url")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  careHome   CareHome  @relation(fields: [careHomeId], references: [id], onDelete: Cascade)
+  stories    Story[]   @relation("StoriesRecordedBy")
+
+  @@index([careHomeId])
+  @@map("users")
+}
+
+model Resident {
+  id              String    @id @default(uuid()) @db.Uuid
+  careHomeId       String    @db.Uuid @map("care_home_id")
+  firstName       String    @map("first_name")
+  lastName        String    @map("last_name")
+  nickname        String?   @map("nickname")
+  gender          Gender
+  dateOfBirth     DateTime? @db.Date @map("date_of_birth")
+  roomNumber      String?   @map("room_number")
+  profileImageUrl String?   @map("profile_image_url")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  careHome         CareHome  @relation(fields: [careHomeId], references: [id], onDelete: Cascade)
+  lifeBook         LifeBook?
+
+  @@index([careHomeId])
+  @@map("residents")
+}
+
+model LifeBook {
+  id         String     @id @default(uuid()) @db.Uuid
+  residentId String     @unique @db.Uuid @map("resident_id")
+  bookTitle  String     @map("book_title")
+  coverStyle CoverStyle @map("cover_style")
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  resident   Resident   @relation(fields: [residentId], references: [id], onDelete: Cascade)
+  stories    Story[]
+  shareLinks ShareLink[]
+
+  @@map("life_books")
+}
+
+model Story {
+  id              String      @id @default(uuid()) @db.Uuid
+  lifeBookId      String      @db.Uuid @map("life_book_id")
+  recordedById    String      @db.Uuid @map("recorded_by")
+  audioFileUrl    String      @map("audio_file_url")
+  rawTranscript   String      @db.Text @map("raw_transcript")
+  literaryContent String      @db.Text @map("literary_content")
+  title           String
+  status          StoryStatus @default(processing)
+  durationSeconds Int         @map("duration_seconds")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  lifeBook         LifeBook   @relation(fields: [lifeBookId], references: [id], onDelete: Cascade)
+  recordedBy       User       @relation("StoriesRecordedBy", fields: [recordedById], references: [id], onDelete: Restrict)
+  shareLinks       ShareLink[]
+
+  @@index([lifeBookId])
+  @@index([recordedById])
+  @@map("stories")
+}
+
+model ShareLink {
+  id          String        @id @default(uuid()) @db.Uuid
+  type        ShareLinkType
+
+  // Business rule (app-level + migration-level CHECK recommended):
+  // - single_story: storyId MUST be set
+  // - full_book: lifeBookId MUST be set and storyId MUST be NULL
+  lifeBookId   String?     @db.Uuid @map("life_book_id")
+  storyId      String?     @db.Uuid @map("story_id")
+
+  accessToken String       @unique @map("access_token")
+  expiresAt   DateTime?    @map("expires_at")
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  lifeBook    LifeBook?    @relation(fields: [lifeBookId], references: [id], onDelete: Cascade)
+  story       Story?       @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+  @@index([lifeBookId])
+  @@index([storyId])
+  @@map("share_links")
+}

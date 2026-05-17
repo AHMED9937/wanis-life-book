@@ -1,0 +1,12 @@
+node_modules
+dist
+server/dist
+.vercel
+*.log
+
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+
+/generated/prisma
