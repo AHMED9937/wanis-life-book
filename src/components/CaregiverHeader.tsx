@@ -53,7 +53,7 @@ export const CaregiverHeader: React.FC<CaregiverHeaderProps> = ({
         {/* Action Controls */}
         <div className="flex flex-wrap items-center gap-2">
           <div className="ml-1">
-            <UserButton afterSignOutUrl="/" />
+            <UserButton afterSignOutUrl="/" signOutFallbackRedirectUrl="/" />
           </div>
 
           {currentView !== 'library' && (
