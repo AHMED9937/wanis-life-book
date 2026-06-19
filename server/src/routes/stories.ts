@@ -46,6 +46,7 @@ storiesRouter.post("/", async (req, res, next) => {
         literaryContent: literaryContent || "",
         durationSeconds: durationSeconds || 0,
         recordedById: req.user!.id,
+        status: 'ready',
       },
     });
 
@@ -62,7 +63,7 @@ storiesRouter.post("/", async (req, res, next) => {
 // Edit the generated transcript, literary content, or tags of a story
 storiesRouter.put("/:id", async (req, res, next) => {
   try {
-    const { title, rawTranscript, literaryContent } = req.body;
+    const { title, rawTranscript, literaryContent, durationSeconds } = req.body;
 
     // Security Check: Verify ownership via the nested Resident relationship
     const existing = await prisma.story.findFirst({
@@ -87,6 +88,7 @@ storiesRouter.put("/:id", async (req, res, next) => {
         ...(title && { title }),
         ...(rawTranscript !== undefined && { rawTranscript }),
         ...(literaryContent !== undefined && { literaryContent }),
+        ...(durationSeconds !== undefined && { durationSeconds }),
       },
     });
 

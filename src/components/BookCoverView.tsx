@@ -1,17 +1,21 @@
 import React from 'react';
 import { Resident } from '../types';
-import { BookOpen, Printer, Sparkles } from 'lucide-react';
+import { BookOpen, Printer, Sparkles, Pencil, Trash2 } from 'lucide-react';
 
 interface BookCoverViewProps {
   resident: Resident;
   onOpenBook: () => void;
   onPrintEntireBook: () => void;
+  onEditBook?: () => void;
+  onDeleteBook?: () => void;
 }
 
 export const BookCoverView: React.FC<BookCoverViewProps> = ({
   resident,
   onOpenBook,
-  onPrintEntireBook
+  onPrintEntireBook,
+  onEditBook,
+  onDeleteBook,
 }) => {
   const getBgClass = (color: Resident['coverColor']) => {
     switch (color) {
@@ -101,6 +105,31 @@ export const BookCoverView: React.FC<BookCoverViewProps> = ({
               <Printer size={14} className="text-[#c9a84c]" />
               <span>طباعة الكتاب كاملاً للمقيم أو أسرته</span>
             </button>
+
+            {(onEditBook || onDeleteBook) && (
+              <div className="flex items-center gap-3 mt-1">
+                {onEditBook && (
+                  <button
+                    type="button"
+                    onClick={onEditBook}
+                    className="inline-flex items-center gap-1 text-xs text-[#e3c778] hover:text-[#f4ecd8] transition"
+                  >
+                    <Pencil size={13} />
+                    <span>تعديل الكتاب</span>
+                  </button>
+                )}
+                {onDeleteBook && (
+                  <button
+                    type="button"
+                    onClick={onDeleteBook}
+                    className="inline-flex items-center gap-1 text-xs text-red-300 hover:text-red-200 transition"
+                  >
+                    <Trash2 size={13} />
+                    <span>حذف الكتاب</span>
+                  </button>
+                )}
+              </div>
+            )}
 
           </div>
 

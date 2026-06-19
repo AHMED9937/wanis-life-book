@@ -233,12 +233,12 @@ export const RecordStoryView: React.FC<RecordStoryViewProps> = ({
       return;
     }
 
+    const existingTranscript = customContent.trim();
+
     setSeconds(0);
     setSpeechError(null);
-    finalTranscriptRef.current = '';
+    finalTranscriptRef.current = existingTranscript;
     setInterimTranscript('');
-    setCustomTitle('');
-    setCustomContent('');
     shouldMoveToReviewRef.current = false;
     stopRequestedRef.current = false;
     hadRecognitionErrorRef.current = false;

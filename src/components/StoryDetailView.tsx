@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { Resident, Story } from '../types';
-import { Printer, Volume2, ArrowRight, ArrowLeft, Calendar, Tag, CornerUpRight, Play, Pause } from 'lucide-react';
+import { Printer, Volume2, ArrowRight, ArrowLeft, Calendar, Tag, CornerUpRight, Play, Pause, Pencil, Trash2, Save, X } from 'lucide-react';
 import { speakArabic, stopSpeech, loadSpeechVoices, isTtsSupported } from '../lib/tts';
 
 interface StoryDetailViewProps {
@@ -9,13 +9,17 @@ interface StoryDetailViewProps {
   storyIndex: number;
   onGoToPage: (page: number) => void;
   onBackToIndex: () => void;
+  onUpdateStory?: (storyIndex: number, updated: Story) => void;
+  onDeleteStory?: (storyIndex: number) => void;
 }
 
 export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
   resident,
   storyIndex,
   onGoToPage,
-  onBackToIndex
+  onBackToIndex,
+  onUpdateStory,
+  onDeleteStory,
 }) => {
   const { getToken } = useAuth();
   const story: Story | undefined = resident.stories[storyIndex];
@@ -26,6 +30,9 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
   const [playbackProgress, setPlaybackProgress] = useState(0);
   const [ttsError, setTtsError] = useState<string | null>(null);
   const [isTtsLoading, setIsTtsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
   const progressTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const progressStartRef = useRef(0);
   const progressDurationRef = useRef(3000);
@@ -72,7 +79,15 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
   useEffect(() => {
     stopPlayback();
     setTtsError(null);
+    setIsEditing(false);
   }, [storyIndex, stopPlayback]);
+
+  useEffect(() => {
+    if (story) {
+      setEditTitle(story.title);
+      setEditContent(story.content);
+    }
+  }, [story]);
 
   useEffect(() => () => stopPlayback(), [stopPlayback]);
 
@@ -89,6 +104,37 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
 
   const handlePrintSingle = () => {
     window.print();
+  };
+
+  const handleStartEdit = () => {
+    stopPlayback();
+    if (story) {
+      setEditTitle(story.title);
+      setEditContent(story.content);
+    }
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    if (story) {
+      setEditTitle(story.title);
+      setEditContent(story.content);
+    }
+    setIsEditing(false);
+  };
+
+  const handleSaveEdit = () => {
+    if (!story || !onUpdateStory) return;
+    const trimmedTitle = editTitle.trim();
+    const trimmedContent = editContent.trim();
+    if (!trimmedTitle || !trimmedContent) return;
+
+    onUpdateStory(storyIndex, {
+      ...story,
+      title: trimmedTitle,
+      content: trimmedContent,
+    });
+    setIsEditing(false);
   };
 
   const speakStory = async () => {
@@ -181,19 +227,35 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
           </button>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs bg-[#c9a84c]/10 text-[#a08131] px-2 py-0.5 rounded border border-[#c9a84c]/20 font-mono">
-              كتاب حياة {resident.name}
-            </span>
+            {onUpdateStory && !isEditing && (
+              <button
+                type="button"
+                onClick={handleStartEdit}
+                className="flex items-center gap-1 px-3 py-1 bg-white hover:bg-gray-50 text-[#2c1e16] rounded border border-[#c9a84c]/60 text-xs font-bold transition shadow-xs cursor-pointer"
+              >
+                <Pencil size={14} className="text-[#c9a84c]" />
+                <span>تعديل</span>
+              </button>
+            )}
+            {onDeleteStory && !isEditing && (
+              <button
+                type="button"
+                onClick={() => onDeleteStory(storyIndex)}
+                className="flex items-center gap-1 px-3 py-1 bg-red-50 hover:bg-red-100 text-red-700 rounded border border-red-200 text-xs font-bold transition shadow-xs cursor-pointer"
+              >
+                <Trash2 size={14} />
+                <span>حذف</span>
+              </button>
+            )}
+            <button
+              onClick={handlePrintSingle}
+              className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-gray-50 text-[#2c1e16] rounded border border-[#c9a84c] text-xs font-bold transition shadow-xs cursor-pointer"
+              title="طباعة هذه الحكاية فقط بالخط الكبير"
+            >
+              <Printer size={14} className="text-[#c9a84c]" />
+              <span>طباعة 🖨️</span>
+            </button>
           </div>
-
-          <button
-            onClick={handlePrintSingle}
-            className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-gray-50 text-[#2c1e16] rounded border border-[#c9a84c] text-xs font-bold transition shadow-xs cursor-pointer"
-            title="طباعة هذه الحكاية فقط بالخط الكبير"
-          >
-            <Printer size={14} className="text-[#c9a84c]" />
-            <span>طباعة هذه الحكاية 🖨️</span>
-          </button>
 
         </div>
 
@@ -212,7 +274,16 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
               </div>
 
               <h1 className="text-3xl md:text-4xl font-bold font-amiri text-[#2c1e16] leading-tight">
-                {story.title}
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="w-full bg-white px-3 py-2 rounded border border-[#c9a84c]/60 text-center font-amiri text-2xl md:text-3xl focus:outline-none focus:ring-2 focus:ring-[#c9a84c]"
+                  />
+                ) : (
+                  story.title
+                )}
               </h1>
 
               {/* Generative Keywords Ribbon */}
@@ -268,12 +339,42 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
               </div>
             </div>
 
-            {/* The Core Narrative Text  Set to Minimum 20px with High Line Height */}
+            {/* The Core Narrative Text */}
             <div className="text-right py-2">
-              <p className={`story-body-text whitespace-pre-line text-justify ${isPlaying ? 'bg-[#c9a84c]/10 rounded-lg p-2 transition-all' : ''}`}>
-                {story.content}
-              </p>
+              {isEditing ? (
+                <textarea
+                  rows={12}
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  className="w-full bg-white p-4 rounded border border-[#c9a84c]/60 font-amiri text-base leading-relaxed text-[#2c1e16] focus:outline-none focus:ring-2 focus:ring-[#c9a84c] resize-y min-h-[280px]"
+                />
+              ) : (
+                <p className={`story-body-text whitespace-pre-line text-justify ${isPlaying ? 'bg-[#c9a84c]/10 rounded-lg p-2 transition-all' : ''}`}>
+                  {story.content}
+                </p>
+              )}
             </div>
+
+            {isEditing && (
+              <div className="flex items-center justify-center gap-3 mt-4 no-print">
+                <button
+                  type="button"
+                  onClick={handleCancelEdit}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-gray-50 text-[#593119] rounded-lg border border-[#c9a84c]/40 text-sm font-bold transition"
+                >
+                  <X size={16} />
+                  <span>إلغاء</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveEdit}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 bg-[#c9a84c] hover:bg-[#a08131] text-[#1c120a] rounded-lg text-sm font-bold transition shadow-md"
+                >
+                  <Save size={16} />
+                  <span>حفظ التعديلات</span>
+                </button>
+              </div>
+            )}
 
           </div>
 

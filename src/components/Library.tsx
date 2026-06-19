@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Resident } from '../types';
-import { BookOpen, Mic, Sparkles, ChevronLeft, Loader2, Search, X } from 'lucide-react';
+import { BookOpen, Mic, Sparkles, ChevronLeft, Loader2, Search, X, Pencil, Trash2 } from 'lucide-react';
 import { WanisLogoMark } from './WanisLogo';
 import { residentSearchBlob, searchMatches } from '../lib/search';
 
@@ -9,6 +9,8 @@ interface LibraryProps {
   onSelectBook: (residentId: string) => void;
   onCreateNew: () => void;
   onSearchQueryChange: (query: string) => void;
+  onEditBook?: (residentId: string) => void;
+  onDeleteBook?: (residentId: string) => void;
   isSearchLoading?: boolean;
 }
 
@@ -17,6 +19,8 @@ export const Library: React.FC<LibraryProps> = ({
   onSelectBook,
   onCreateNew,
   onSearchQueryChange,
+  onEditBook,
+  onDeleteBook,
   isSearchLoading = false,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -158,12 +162,46 @@ export const Library: React.FC<LibraryProps> = ({
             return (
               <div 
                 key={resident.id}
-                onClick={() => onSelectBook(resident.id)}
-                className="group cursor-pointer transform transition duration-300 hover:-translate-y-2 focus-within:ring-4 focus-within:ring-[#c9a84c] rounded-xl outline-none"
+                className="group/card relative cursor-pointer transform transition duration-300 hover:-translate-y-2 focus-within:ring-4 focus-within:ring-[#c9a84c] rounded-xl outline-none"
               >
+                {(onEditBook || onDeleteBook) && (
+                  <div className="absolute top-2 left-2 z-20 flex gap-1 opacity-0 group-hover/card:opacity-100 transition">
+                    {onEditBook && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditBook(resident.id);
+                        }}
+                        className="w-8 h-8 rounded-full bg-[#f4ecd8] hover:bg-white text-[#593119] border border-[#c9a84c]/50 flex items-center justify-center shadow-md"
+                        title="تعديل الكتاب"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                    )}
+                    {onDeleteBook && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteBook(resident.id);
+                        }}
+                        className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 flex items-center justify-center shadow-md"
+                        title="حذف الكتاب"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                <div
+                  onClick={() => onSelectBook(resident.id)}
+                  className="h-full"
+                >
                 <div className={`h-96 rounded-r-2xl rounded-l-md bg-gradient-to-br ${bgGradient} border-r-8 p-5 flex flex-col justify-between shadow-2xl relative overflow-hidden`}>
                   
-                  <div className="absolute inset-2 border border-[#c9a84c]/40 rounded-r-xl rounded-l-sm pointer-events-none group-hover:border-[#c9a84c] transition duration-300" />
+                  <div className="absolute inset-2 border border-[#c9a84c]/40 rounded-r-xl rounded-l-sm pointer-events-none group-hover/card:border-[#c9a84c] transition duration-300" />
                   <div className="absolute inset-3 border border-dashed border-[#c9a84c]/20 rounded-r-lg rounded-l-xs pointer-events-none" />
                   
                   <div className="absolute top-0 bottom-0 right-0 w-8 bg-black/25 border-l border-white/5 pointer-events-none" />
@@ -173,7 +211,7 @@ export const Library: React.FC<LibraryProps> = ({
                       غرفة {resident.roomNumber}
                     </span>
                     
-                    <h3 className="text-xl font-bold font-amiri text-[#f4ecd8] tracking-wide leading-tight group-hover:text-[#e3c778] transition">
+                    <h3 className="text-xl font-bold font-amiri text-[#f4ecd8] tracking-wide leading-tight group-hover/card:text-[#e3c778] transition">
                       {resident.coverTitle}
                     </h3>
                     
@@ -190,8 +228,8 @@ export const Library: React.FC<LibraryProps> = ({
                     </p>
                   </div>
 
-                  <div className="relative z-10 my-auto text-center flex flex-col items-center justify-center opacity-85 group-hover:opacity-100 transition duration-300">
-                    <div className="w-16 h-16 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/30 flex items-center justify-center text-[#c9a84c] group-hover:scale-110 transition duration-300">
+                  <div className="relative z-10 my-auto text-center flex flex-col items-center justify-center opacity-85 group-hover/card:opacity-100 transition duration-300">
+                    <div className="w-16 h-16 rounded-full bg-[#c9a84c]/10 border border-[#c9a84c]/30 flex items-center justify-center text-[#c9a84c] group-hover/card:scale-110 transition duration-300">
                       <BookOpen size={32} />
                     </div>
                     <span className="text-[11px] uppercase tracking-widest text-[#c9a84c] mt-2 block font-mono">
@@ -204,7 +242,7 @@ export const Library: React.FC<LibraryProps> = ({
                       <Mic size={13} className="text-[#c9a84c]" />
                       <span>{resident.stories.length} حكايات</span>
                     </div>
-                    <div className="flex items-center gap-1 text-[#c9a84c] group-hover:translate-x-1 transition duration-300 font-bold">
+                    <div className="flex items-center gap-1 text-[#c9a84c] group-hover/card:translate-x-1 transition duration-300 font-bold">
                       <span>تصفح</span>
                       <ChevronLeft size={14} />
                     </div>
@@ -215,6 +253,7 @@ export const Library: React.FC<LibraryProps> = ({
                 <div className="mt-2.5 px-2 flex items-center justify-between text-xs text-gray-400">
                   <span>تاريخ الانضمام:</span>
                   <span className="font-mono">{resident.admissionDate}</span>
+                </div>
                 </div>
               </div>
             );

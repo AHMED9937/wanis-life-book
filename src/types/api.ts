@@ -71,7 +71,29 @@ export interface CreateResidentRequest {
   firstName: string;
   lastName: string;
   gender: DbGender;
+  nickname?: string;
   roomNumber?: string;
+  dateOfBirth?: string | null;
+  bookTitle?: string;
+  coverStyle?: DbCoverStyle;
+}
+
+export interface UpdateResidentRequest {
+  firstName?: string;
+  lastName?: string;
+  gender?: DbGender;
+  nickname?: string;
+  roomNumber?: string;
+  dateOfBirth?: string | null;
+  bookTitle?: string;
+  coverStyle?: DbCoverStyle;
+}
+
+export interface UpdateStoryRequest {
+  title?: string;
+  literaryContent?: string;
+  rawTranscript?: string;
+  durationSeconds?: number;
 }
 
 export interface MeProfileDto {

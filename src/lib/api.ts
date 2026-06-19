@@ -10,6 +10,8 @@ import {
   DbResidentDto,
   DbStoryDto,
   MeProfileDto,
+  UpdateResidentRequest,
+  UpdateStoryRequest,
 } from '../types/api';
 
 const BASE_URL = '/api';
@@ -28,6 +30,31 @@ const mapCoverColor = (dbStyle?: DbCoverStyle): 'emerald' | 'burgundy' | 'sapphi
   if (dbStyle === 'forest_green') return 'emerald';
   // classic_leather defaults to burgundy
   return 'burgundy';
+};
+
+const mapCoverColorToDb = (color: Resident['coverColor']): DbCoverStyle => {
+  if (color === 'emerald') return 'forest_green';
+  if (color === 'amber') return 'vintage_gold';
+  return 'classic_leather';
+};
+
+const ageToDateOfBirth = (age: number): string => {
+  const year = new Date().getFullYear() - age;
+  return new Date(year, 0, 1).toISOString();
+};
+
+const buildResidentPayload = (residentData: Partial<Resident>): CreateResidentRequest => {
+  const names = residentData.name ? residentData.name.split(' ') : ['مجهول'];
+  return {
+    firstName: names[0] || 'مجهول',
+    lastName: names.slice(1).join(' ') || 'مجهول',
+    gender: 'male',
+    nickname: residentData.nickname,
+    roomNumber: residentData.roomNumber,
+    dateOfBirth: residentData.age ? ageToDateOfBirth(residentData.age) : null,
+    bookTitle: residentData.coverTitle,
+    coverStyle: residentData.coverColor ? mapCoverColorToDb(residentData.coverColor) : undefined,
+  };
 };
 
 const formatDuration = (seconds?: number | null): string => {
@@ -170,14 +197,7 @@ export const fetchResidents = async (token: string, query?: string): Promise<Res
 };
 
 export const createResident = async (token: string, residentData: Partial<Resident>): Promise<Resident> => {
-  // Break apart the flat frontend structure to match what the backend expects
-  const names = residentData.name ? residentData.name.split(' ') : ["مجهول"];
-  const payload: CreateResidentRequest = {
-    firstName: names[0] || "مجهول",
-    lastName: names.slice(1).join(' ') || "مجهول",
-    gender: "male", // Defaults since frontend didn't have a gender picker
-    roomNumber: residentData.roomNumber,
-  };
+  const payload = buildResidentPayload(residentData);
 
   const data = await requestJson<DbResidentDto>(`${BASE_URL}/residents`, {
     method: 'POST',
@@ -188,6 +208,31 @@ export const createResident = async (token: string, residentData: Partial<Reside
     body: JSON.stringify(payload)
   });
   return mapResident(data);
+};
+
+export const updateResident = async (
+  token: string,
+  residentId: string,
+  residentData: Partial<Resident>,
+): Promise<Resident> => {
+  const payload: UpdateResidentRequest = buildResidentPayload(residentData);
+
+  const data = await requestJson<DbResidentDto>(`${BASE_URL}/residents/${residentId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+  return mapResident(data);
+};
+
+export const deleteResident = async (token: string, residentId: string): Promise<void> => {
+  await requestJson<{ success: boolean }>(`${BASE_URL}/residents/${residentId}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
 };
 
 export const createStory = async (token: string, lifeBookId: string, storyData: Story): Promise<Story> => {
@@ -212,4 +257,41 @@ export const createStory = async (token: string, lifeBookId: string, storyData: 
     body: JSON.stringify(payload)
   });
   return mapStory(data);
+};
+
+export const updateStory = async (
+  token: string,
+  storyId: string,
+  storyData: Partial<Story>,
+): Promise<Story> => {
+  const payload: UpdateStoryRequest = {
+    title: storyData.title,
+    literaryContent: storyData.content,
+    rawTranscript: storyData.content,
+  };
+
+  if (storyData.audioDuration) {
+    const [min, sec] = storyData.audioDuration.split(':').map(Number);
+    const totalSeconds = min * 60 + (sec || 0);
+    if (!Number.isNaN(totalSeconds)) {
+      payload.durationSeconds = totalSeconds;
+    }
+  }
+
+  const data = await requestJson<DbStoryDto>(`${BASE_URL}/stories/${storyId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+  return mapStory(data);
+};
+
+export const deleteStory = async (token: string, storyId: string): Promise<void> => {
+  await requestJson<{ success: boolean }>(`${BASE_URL}/stories/${storyId}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
 };

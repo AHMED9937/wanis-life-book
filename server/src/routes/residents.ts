@@ -19,7 +19,11 @@ residentsRouter.get("/", async (req, res, next) => {
 
   const include = {
     lifeBook: {
-      include: { stories: true },
+      include: {
+        stories: {
+          orderBy: { createdAt: 'asc' as const },
+        },
+      },
     },
   };
 
@@ -61,7 +65,11 @@ residentsRouter.get("/:id", async (req, res, next) => {
       },
       include: { 
         lifeBook: { 
-          include: { stories: true } 
+          include: { 
+            stories: {
+              orderBy: { createdAt: 'asc' },
+            },
+          },
         } 
       },
     });
@@ -84,7 +92,7 @@ residentsRouter.get("/:id", async (req, res, next) => {
 // Create a new resident and automatically initialize their 1:1 LifeBook
 residentsRouter.post("/", async (req, res, next) => {
   try {
-    const { firstName, lastName, gender, dateOfBirth, roomNumber } = req.body;
+    const { firstName, lastName, gender, dateOfBirth, roomNumber, nickname, bookTitle, coverStyle } = req.body;
 
     if (!firstName || !lastName || !gender) {
       res.status(400).json({ error: "Missing required fields: firstName, lastName, gender" });
@@ -96,14 +104,15 @@ residentsRouter.post("/", async (req, res, next) => {
         firstName,
         lastName,
         gender,
+        nickname: nickname || null,
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
         roomNumber,
         careHomeId: req.user!.careHomeId,
         createdById: req.user!.id,
         lifeBook: {
           create: {
-            bookTitle: `كتاب حياة ${firstName}`,
-            coverStyle: "classic_leather",
+            bookTitle: bookTitle || `كتاب حياة ${firstName}`,
+            coverStyle: coverStyle || "classic_leather",
           },
         },
       },
@@ -125,11 +134,12 @@ residentsRouter.post("/", async (req, res, next) => {
 // Update a resident's details
 residentsRouter.put("/:id", async (req, res, next) => {
   try {
-    const { firstName, lastName, gender, dateOfBirth, roomNumber } = req.body;
+    const { firstName, lastName, gender, dateOfBirth, roomNumber, nickname, bookTitle, coverStyle } = req.body;
 
     // First ensure the resident belongs to the user's care home
     const existing = await prisma.resident.findUnique({
       where: { id: req.params.id, careHomeId: req.user!.careHomeId },
+      include: { lifeBook: true },
     });
 
     if (!existing) {
@@ -137,14 +147,35 @@ residentsRouter.put("/:id", async (req, res, next) => {
       return;
     }
 
+    const lifeBookUpdate =
+      bookTitle !== undefined || coverStyle !== undefined
+        ? {
+            update: {
+              ...(bookTitle !== undefined && { bookTitle }),
+              ...(coverStyle !== undefined && { coverStyle }),
+            },
+          }
+        : undefined;
+
     const updated = await prisma.resident.update({
       where: { id: req.params.id },
       data: {
         ...(firstName && { firstName }),
         ...(lastName && { lastName }),
         ...(gender && { gender }),
+        ...(nickname !== undefined && { nickname: nickname || null }),
         ...(dateOfBirth !== undefined && { dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null }),
         ...(roomNumber !== undefined && { roomNumber }),
+        ...(lifeBookUpdate && existing.lifeBook && { lifeBook: lifeBookUpdate }),
+      },
+      include: {
+        lifeBook: {
+          include: {
+            stories: {
+              orderBy: { createdAt: 'asc' },
+            },
+          },
+        },
       },
     });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Resident } from '../types';
-import { Printer, BookOpen, ChevronRight, FileText, Calendar, Clock, Tag } from 'lucide-react';
+import { Printer, BookOpen, ChevronRight, FileText, Calendar, Clock, Tag, Pencil, Trash2 } from 'lucide-react';
 
 interface BookIndexViewProps {
   resident: Resident;
@@ -8,6 +8,8 @@ interface BookIndexViewProps {
   onGoToRecord: () => void;
   onPrintEntireBook: () => void;
   onCloseBook: () => void;
+  onEditBook?: () => void;
+  onDeleteStory?: (storyIndex: number) => void;
 }
 
 export const BookIndexView: React.FC<BookIndexViewProps> = ({
@@ -15,7 +17,9 @@ export const BookIndexView: React.FC<BookIndexViewProps> = ({
   onSelectStory,
   onGoToRecord,
   onPrintEntireBook,
-  onCloseBook
+  onCloseBook,
+  onEditBook,
+  onDeleteStory,
 }) => {
   return (
     <div className="max-w-4xl mx-auto my-6 px-4">
@@ -53,6 +57,17 @@ export const BookIndexView: React.FC<BookIndexViewProps> = ({
             <Printer size={15} className="text-[#c9a84c]" />
             <span>طباعة الكتاب كاملاً</span>
           </button>
+
+          {onEditBook && (
+            <button
+              type="button"
+              onClick={onEditBook}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-gray-50 text-[#2c1e16] rounded-md border border-[#c9a84c]/60 text-xs font-bold transition shadow-sm"
+            >
+              <Pencil size={14} className="text-[#c9a84c]" />
+              <span>تعديل الكتاب</span>
+            </button>
+          )}
 
         </div>
 
@@ -131,8 +146,21 @@ export const BookIndexView: React.FC<BookIndexViewProps> = ({
                     </div>
                   </div>
 
-                  {/* Left side: simulated page target navigation */}
+                  {/* Left side: actions + page navigation */}
                   <div className="self-end md:self-center flex items-center gap-2">
+                    {onDeleteStory && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteStory(index);
+                        }}
+                        className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center transition opacity-0 group-hover:opacity-100"
+                        title="حذف الحكاية"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    )}
                     <span className="text-xs text-gray-400 font-mono group-hover:text-[#c9a84c] transition">
                       الصفحة {index + 3}
                     </span>

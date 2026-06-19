@@ -8,16 +8,21 @@ import { RecordStoryView } from './components/RecordStoryView';
 import { StoryDetailView } from './components/StoryDetailView';
 import { ContiguousPrintView } from './components/ContiguousPrintView';
 import { CreateResidentModal } from './components/CreateResidentModal';
+import { ConfirmDialog } from './components/ConfirmDialog';
 import { Resident, Story } from './types';
 import { CareHomeSetupModal } from './components/CareHomeSetupModal';
 import { WanisLogoMark } from './components/WanisLogo';
 import {
   createResident,
   createStory,
+  deleteResident,
+  deleteStory,
   fetchMeProfile,
   fetchResidents,
   resolveApiErrorMessage,
   updateCareHome,
+  updateResident,
+  updateStory,
 } from './lib/api';
 
 export function AuthenticatedApp() {
@@ -31,6 +36,12 @@ export function AuthenticatedApp() {
   
   // Modals and feedback state
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingResident, setEditingResident] = useState<Resident | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isResidentsLoading, setIsResidentsLoading] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
@@ -187,18 +198,121 @@ export function AuthenticatedApp() {
     }
 
     try {
+      if (editingResident) {
+        const updated = await updateResident(token, editingResident.id, newResident);
+        await loadResidents('');
+        setIsCreateModalOpen(false);
+        setEditingResident(null);
+        showToast(`✅ تم تحديث كتاب حياة ${updated.name} بنجاح`);
+        if (selectedResidentId === updated.id) {
+          setSelectedResidentId(updated.id);
+        }
+        return;
+      }
+
       const created = await createResident(token, newResident);
       await loadResidents('');
       setIsCreateModalOpen(false);
       showToast(`✨ تم تأسيس كتاب حياة جديد للمقيم ${created.name} بنجاح!`);
-      
-      // Auto-select and open the new book to its Index (page = 1)
       setSelectedResidentId(created.id);
       setView('book');
       setPage(1);
     } catch (e) {
       console.error(e);
-      showToast(resolveApiErrorMessage(e, '❌ حدث خطأ أثناء إنشاء الكتاب'));
+      showToast(resolveApiErrorMessage(e, editingResident ? '❌ حدث خطأ أثناء تحديث الكتاب' : '❌ حدث خطأ أثناء إنشاء الكتاب'));
+    }
+  };
+
+  const handleOpenEditResident = (residentId: string) => {
+    const resident = residents.find((r) => r.id === residentId);
+    if (!resident) return;
+    setEditingResident(resident);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleRequestDeleteResident = (residentId: string) => {
+    const resident = residents.find((r) => r.id === residentId);
+    if (!resident) return;
+
+    setConfirmDialog({
+      title: 'حذف كتاب الحياة',
+      message: `هل أنت متأكد من حذف "${resident.coverTitle}"؟ سيتم حذف جميع الحكايات المرتبطة به نهائياً.`,
+      onConfirm: () => void handleDeleteResident(residentId),
+    });
+  };
+
+  const handleDeleteResident = async (residentId: string) => {
+    setConfirmDialog(null);
+    const token = await getToken();
+    if (!token) {
+      showToast('❌ تعذر الحصول على جلسة المصادقة. حاول تسجيل الدخول مرة أخرى.');
+      return;
+    }
+
+    try {
+      await deleteResident(token, residentId);
+      await loadResidents('');
+      if (selectedResidentId === residentId) {
+        handleGoToLibrary();
+      }
+      showToast('🗑️ تم حذف كتاب الحياة بنجاح');
+    } catch (e) {
+      console.error(e);
+      showToast(resolveApiErrorMessage(e, '❌ حدث خطأ أثناء حذف الكتاب'));
+    }
+  };
+
+  const handleUpdateStory = async (_storyIndex: number, updatedStory: Story) => {
+    if (!selectedResidentId) return;
+
+    const token = await getToken();
+    if (!token) {
+      showToast('❌ تعذر الحصول على جلسة المصادقة. حاول تسجيل الدخول مرة أخرى.');
+      return;
+    }
+
+    try {
+      await updateStory(token, updatedStory.id, updatedStory);
+      await loadResidents('');
+      showToast(`✅ تم تحديث الحكاية "${updatedStory.title}" بنجاح`);
+    } catch (e) {
+      console.error(e);
+      showToast(resolveApiErrorMessage(e, '❌ حدث خطأ أثناء تحديث الحكاية'));
+    }
+  };
+
+  const handleRequestDeleteStory = (storyIndex: number) => {
+    const story = currentResident?.stories[storyIndex];
+    if (!story) return;
+
+    setConfirmDialog({
+      title: 'حذف الحكاية',
+      message: `هل أنت متأكد من حذف "${story.title}"؟ لا يمكن التراجع عن هذا الإجراء.`,
+      onConfirm: () => void handleDeleteStory(storyIndex),
+    });
+  };
+
+  const handleDeleteStory = async (storyIndex: number) => {
+    setConfirmDialog(null);
+    if (!selectedResidentId || !currentResident) return;
+
+    const story = currentResident.stories[storyIndex];
+    if (!story) return;
+
+    const token = await getToken();
+    if (!token) {
+      showToast('❌ تعذر الحصول على جلسة المصادقة. حاول تسجيل الدخول مرة أخرى.');
+      return;
+    }
+
+    try {
+      await deleteStory(token, story.id);
+      await loadResidents('');
+      showToast(`🗑️ تم حذف الحكاية "${story.title}"`);
+      setPage(1);
+    } catch (e) {
+      console.error(e);
+      showToast(resolveApiErrorMessage(e, '❌ حدث خطأ أثناء حذف الحكاية'));
     }
   };
 
@@ -270,7 +384,10 @@ export function AuthenticatedApp() {
             currentView={view}
             careHomeName={careHomeName}
             onGoToLibrary={handleGoToLibrary}
-            onCreateNewResident={() => setIsCreateModalOpen(true)}
+            onCreateNewResident={() => {
+              setEditingResident(null);
+              setIsCreateModalOpen(true);
+            }}
           />
 
           {needsCareHomeSetup && careHomeName && !isProfileLoading && (
@@ -319,8 +436,13 @@ export function AuthenticatedApp() {
                   <Library
                     residents={residents}
                     onSelectBook={handleSelectBook}
-                    onCreateNew={() => setIsCreateModalOpen(true)}
+                    onCreateNew={() => {
+                      setEditingResident(null);
+                      setIsCreateModalOpen(true);
+                    }}
                     onSearchQueryChange={handleSearchQueryChange}
+                    onEditBook={handleOpenEditResident}
+                    onDeleteBook={handleRequestDeleteResident}
                     isSearchLoading={isSearchLoading}
                   />
                 )}
@@ -337,6 +459,8 @@ export function AuthenticatedApp() {
                     resident={currentResident}
                     onOpenBook={handleOpenBook}
                     onPrintEntireBook={handleTriggerPrintEntireBook}
+                    onEditBook={() => handleOpenEditResident(currentResident.id)}
+                    onDeleteBook={() => handleRequestDeleteResident(currentResident.id)}
                   />
                 )}
 
@@ -348,6 +472,8 @@ export function AuthenticatedApp() {
                     onGoToRecord={handleGoToRecord}
                     onPrintEntireBook={handleTriggerPrintEntireBook}
                     onCloseBook={() => setPage(0)}
+                    onEditBook={() => handleOpenEditResident(currentResident.id)}
+                    onDeleteStory={handleRequestDeleteStory}
                   />
                 )}
 
@@ -367,6 +493,8 @@ export function AuthenticatedApp() {
                     storyIndex={page - 3}
                     onGoToPage={handleGoToSpecificPage}
                     onBackToIndex={handleOpenBook}
+                    onUpdateStory={handleUpdateStory}
+                    onDeleteStory={handleRequestDeleteStory}
                   />
                 )}
 
@@ -396,8 +524,22 @@ export function AuthenticatedApp() {
           {/* Modal for creating incoming resident books */}
           <CreateResidentModal
             isOpen={isCreateModalOpen}
-            onClose={() => setIsCreateModalOpen(false)}
+            onClose={() => {
+              setIsCreateModalOpen(false);
+              setEditingResident(null);
+            }}
             onSave={handleSaveNewResident}
+            editingResident={editingResident}
+          />
+
+          <ConfirmDialog
+            isOpen={Boolean(confirmDialog)}
+            title={confirmDialog?.title ?? ''}
+            message={confirmDialog?.message ?? ''}
+            confirmLabel="نعم، احذف"
+            variant="danger"
+            onConfirm={() => confirmDialog?.onConfirm()}
+            onCancel={() => setConfirmDialog(null)}
           />
 
           {/* Custom nostalgic static desktop footer */}
