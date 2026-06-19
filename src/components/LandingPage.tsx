@@ -18,11 +18,14 @@ import {
   PenLine,
   GraduationCap,
   Users,
+  Crown,
+  Star,
 } from 'lucide-react';
 import { WanisLogo, WanisLogoMark } from './WanisLogo';
 
+const TEAM_LEADER = 'صفيه محمد';
+
 const TEAM_CREATORS = [
-  'صفيه محمد',
   'روينا العبدالرحيم',
   'دانه العبيدان',
   'جوانا السعوي',
@@ -462,6 +465,84 @@ export function LandingPage() {
                 هذا التطبيق ثمرة عمل فريق طلابي متعاون، بإشراف معلّمتهم، بهدف توثيق ذكريات كبار السن
                 وإحياء قيمة الحكاية الشفهية في بيئة الرعاية.
               </p>
+            </div>
+
+            {/* Team leader spotlight */}
+            <div className="relative max-w-3xl mx-auto mb-14">
+              <div className="absolute -inset-px rounded-2xl bg-gradient-to-l from-[#c9a84c] via-[#e3c778] to-[#a08131] opacity-50 blur-[2px] landing-pulse pointer-events-none" />
+
+              <div className="relative overflow-hidden rounded-2xl border-2 border-[#c9a84c] bg-gradient-to-br from-[#1c120a] via-[#261508] to-[#3a2010] shadow-2xl landing-leader-glow">
+                <div className="absolute inset-0 opacity-[0.07] bg-[radial-gradient(#e3c778_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-l from-transparent via-[#e3c778] to-transparent" />
+
+                <div className="relative z-10 grid md:grid-cols-[1fr_auto] items-center gap-8 p-8 md:p-10">
+                  <div className="text-center md:text-right">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#c9a84c]/20 border border-[#e3c778]/50 text-[#e3c778] text-xs font-bold font-cairo mb-5 shadow-inner">
+                      <Crown size={14} className="text-[#e3c778]" />
+                      <span>قائدة الفريق</span>
+                      <Sparkles size={12} className="text-[#c9a84c]" />
+                    </div>
+
+                    <h3 className="font-amiri text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-[#f4ecd8] leading-[1.25] mb-3">
+                      <span className="text-transparent bg-clip-text bg-gradient-to-l from-[#e3c778] via-[#c9a84c] to-[#a08131]">
+                        صفيه
+                      </span>{' '}
+                      هي قائده الفريق
+                    </h3>
+
+                    <p className="font-amiri text-xl text-[#c9a84c]/95 mb-3">{TEAM_LEADER}</p>
+
+                    <p className="text-sm font-cairo text-[#e8ddc4]/75 leading-relaxed max-w-md md:mr-0 mx-auto">
+                      قادت الفريق بروح التعاون والإبداع  من الفكرة إلى تطبيق يخدم ذكريات كبار السن
+                    </p>
+
+                    <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-5">
+                      {['التنسيق', 'الإبداع', 'القيادة'].map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 rounded-full text-[11px] font-cairo font-semibold bg-[#c9a84c]/15 text-[#e3c778] border border-[#c9a84c]/30"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="relative flex justify-center md:justify-end shrink-0">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-36 h-36 rounded-full bg-[#c9a84c]/15 blur-2xl landing-pulse" />
+                    </div>
+
+                    <div className="relative w-32 h-40 sm:w-36 sm:h-44 rounded-r-2xl rounded-l-sm bg-gradient-to-br from-[#5e3a0d] to-[#361e04] border-r-[8px] border-[#8a5717] shadow-2xl flex flex-col items-center justify-center overflow-hidden">
+                      <div className="absolute inset-2 border border-[#c9a84c]/40 rounded-r-xl pointer-events-none" />
+                      <Star
+                        size={14}
+                        className="absolute top-4 left-4 text-[#e3c778]/60 landing-star-twinkle"
+                        fill="currentColor"
+                      />
+                      <Star
+                        size={10}
+                        className="absolute top-8 right-5 text-[#c9a84c]/50 landing-star-twinkle landing-star-twinkle-delay"
+                        fill="currentColor"
+                      />
+                      <Star
+                        size={12}
+                        className="absolute bottom-6 left-6 text-[#e3c778]/40 landing-star-twinkle"
+                        fill="currentColor"
+                        style={{ animationDelay: '-0.8s' }}
+                      />
+
+                      <div className="relative z-10 w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] rounded-full bg-gradient-to-br from-[#c9a84c] to-[#a08131] flex items-center justify-center shadow-lg shadow-[#c9a84c]/30 mb-3 border-2 border-[#e3c778]/60">
+                        <Crown className="text-[#1c120a]" size={32} strokeWidth={1.75} />
+                      </div>
+                      <p className="relative z-10 font-amiri font-bold text-[#f4ecd8] text-sm text-center px-3 leading-tight">
+                        {TEAM_LEADER}
+                      </p>
+                      <p className="relative z-10 text-[9px] text-[#e3c778] font-cairo mt-1 tracking-wide">TEAM LEADER</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Supervisor spotlight */}
