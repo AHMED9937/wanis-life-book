@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/clerk-react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { WanisLogo } from "./components/WanisLogo";
@@ -13,10 +14,12 @@ createRoot(document.getElementById("root")!).render(
       <ClerkProvider
         publishableKey={clerkPubKey}
         afterSignOutUrl="/"
-        signInFallbackRedirectUrl="/"
-        signUpFallbackRedirectUrl="/"
+        signInFallbackRedirectUrl="/library"
+        signUpFallbackRedirectUrl="/library"
       >
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </ClerkProvider>
     ) : (
       <div className="wood-desk min-h-screen flex items-center justify-center p-6">

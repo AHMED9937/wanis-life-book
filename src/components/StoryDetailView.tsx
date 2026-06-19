@@ -7,7 +7,7 @@ import { speakArabic, stopSpeech, loadSpeechVoices, isTtsSupported } from '../li
 interface StoryDetailViewProps {
   resident: Resident;
   storyIndex: number;
-  onGoToPage: (page: number) => void;
+  onGoToStoryIndex: (storyIndex: number) => void;
   onBackToIndex: () => void;
   onUpdateStory?: (storyIndex: number, updated: Story) => void;
   onDeleteStory?: (storyIndex: number) => void;
@@ -16,7 +16,7 @@ interface StoryDetailViewProps {
 export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
   resident,
   storyIndex,
-  onGoToPage,
+  onGoToStoryIndex,
   onBackToIndex,
   onUpdateStory,
   onDeleteStory,
@@ -391,7 +391,7 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
           {/* Previous story link (Flip Right for RTL chronological order) */}
           {storyIndex > 0 ? (
             <button
-              onClick={() => onGoToPage(storyIndex + 2)} // current is storyIndex+3, prev is storyIndex+2
+              onClick={() => onGoToStoryIndex(storyIndex - 1)}
               className="flex items-center gap-1 px-4 py-2 bg-white hover:bg-[#f4ecd8] text-[#2c1e16] rounded-lg border border-[#c9a84c]/60 font-bold text-xs transition shadow-xs cursor-pointer"
             >
               <ArrowRight size={14} className="text-[#c9a84c]" />
@@ -417,7 +417,7 @@ export const StoryDetailView: React.FC<StoryDetailViewProps> = ({
           {/* Next story link (Flip Left for RTL chronological order) */}
           {storyIndex < totalStories - 1 ? (
             <button
-              onClick={() => onGoToPage(storyIndex + 4)} // current is storyIndex+3, next is storyIndex+4
+              onClick={() => onGoToStoryIndex(storyIndex + 1)}
               className="flex items-center gap-1 px-4 py-2 bg-[#c9a84c] hover:bg-[#a08131] text-[#1c120a] rounded-lg font-bold text-xs transition shadow-xs cursor-pointer"
             >
               <span>الحكاية التالية</span>
